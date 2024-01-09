@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block contenido_home %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-index.css') }}">
+    <title>Blog - Ecofriendly MVD SAS</title>
+</head>
+<body>
+    <main>
+        <div class="cont-blog">
+            <section class="noticias">
+                <h3>Artículos y Noticias</h3>
+                <div id="noticias-container"></div>
+            </section>
+            <aside class="miniaturas">
+                <h3>Artículos destacados</h3>
+                <div class="miniatura-item">
+                    <img src="{{ url_for('static', filename='imagenes/construccion.png') }}" alt="Imagen del artículo">
+                    <div class="miniatura-cont">
+                        <h2>Título del Artículo</h2>
+                        <div class="info">
+                            <span class="fecha">Fecha: 7 de Agosto, 2023</span>
+                            <span class="autor">Por: Autor del Artículo</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+    <script src="{{ url_for('static',filename='javascript/contDinamico.js') }}"></script>
+</body>
+</html>
+{% endblock %}

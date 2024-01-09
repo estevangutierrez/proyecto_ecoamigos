@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
+  <title>Administrador</title>
+</head>
+<body id="admin-p">
+  <header class="header">
+    {% if current_user.is_authenticated %}
+    <h3>Hola, {{ current_user.nombre.split()[0].capitalize() }}</h3>
+    {% endif %}
+    <div>
+        <a href="{{ url_for('auth.logout') }}"><i class="bi bi-box-arrow-in-left"></i></a>
+    </div>
+</header>
+  <aside class="menu">
+    <div>
+        <img src="{{ url_for('static', filename='imagenes/minilogo.png') }}" alt="esta es una imagen" id="imagennn">
+    </div>
+    <nav>
+        <ul class="nav-bar">
+            <li id="opc-pub"><a href="#">Publicaciones</a></li>
+            <li id="opc-sol"><a href="#">Solicitudes</a></li>
+            <li class="dropdown">
+                Usuarios
+                <div class="dropdown-content">
+                    <ul>
+                      <li id="opc-rec"><a href="{{ url_for('admin.recolectores') }}">Recolectores</a></li>
+                      <li id="opc-admin"><a href="{{ url_for('admin.administradores') }}">Administradores</a></li>
+                      <li id="opc-prov"><a href="{{ url_for('admin.proveedores') }}">Proveedores</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </nav>
+  </aside>
+  <main class="contenido">
+    <div id="contenedor">
+      {% block contenido_admin %}{% endblock %}
+    </div>
+  </main>
+</body>
+</html>

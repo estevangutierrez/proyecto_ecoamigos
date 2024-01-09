@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!-- {% extends "administrador.html" %}
+{% block contenido_admin %} -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
+    <title>Publicaciones</title>
+</head>
+<body>
+        <div class="filtro">
+            <div class="input-filtro">
+                <select name="" id="">
+                    <option value="default"></option>
+                    <option value="">Autor 1</option>
+                    <option value="">Autor 2</option>
+                    <option value="">Autor 3</option>
+                </select>
+                <input type="date" name="" id="">
+                <button id="btn-buscar-filtro"><i class="bi bi-search"></i></button>
+            </div>
+            <div>
+                <a href="{{ url_for('publicacion.publicacion_form') }}"><button  class="btn-agregar" id="nueva-publ">Nueva Publicacion</button></a>
+            </div>
+        </div>   
+        <div class="cont-tabla">
+            <table class="mostrar-publicaciones" >
+                <thead>
+                    <tr>
+                        <th scoope="col">ID</th>
+                        <th scoope="col">Titulo</th>
+                        <th scoope="col">Fecha</th>
+                        <th scoope="col">Autor</th>
+                        <th scoope="col"></th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider tabla_mostrar" id="publicaciones-cont"> 
+                </tbody>
+            </table>
+            <div class="pagination">
+                <!-- <button id="prevPage">Anterior</button> -->
+                <i class="bi bi-arrow-left-circle-fill" id="prevPage"></i>
+                <span id="currentPage">1</span>
+                <i class="bi bi-arrow-right-circle-fill" id="nextPage"></i>
+                <!-- <button id="nextPage">Siguiente</button> -->
+            </div>
+        </div>
+    <script src="{{ url_for('static',filename='javascript/contDinamico.js') }}"></script>
+</body>
+</html>
+<!-- {% endblock %} -->

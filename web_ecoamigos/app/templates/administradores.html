@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static' , filename='css/estilo-admin.css') }}">
+    <title>Administradores</title>
+</head>
+{% extends "administrador.html" %}
+{% block contenido_admin %}
+<body>
+    <div class="filtro">
+        <div class="input-filtro">
+            <input type="number" name="" id="" placeholder="Buscar por cédula">
+            <button id="btn-buscar-filtro"><i class="bi bi-search"></i></button>
+        </div>
+        <div>
+            <a href="#"><button  class="btn-agregar nuevo-usuario">Registrar administrador</button></a>
+        </div>
+    </div>   
+    <div class="cont-tabla">
+        <table class="mostrar-publicaciones" >
+            <thead>
+                <tr>
+                    <th scoope="col">ID</th>
+                    <th scoope="col">Nombre</th>
+                    <th scoope="col">Correo</th>
+                    <th scoope="col">Teléfono</th>
+                    <th scope="col">Estado</th>
+                    <th scoope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider tabla-mostrar" id="admin-tabla">
+            </tbody>
+        </table>
+        <div class="pagination">
+            <!-- <button id="prevPage">Anterior</button> -->
+            <i class="bi bi-arrow-left-circle-fill" id="prevPage"></i>
+            <span id="currentPage">1</span>
+            <i class="bi bi-arrow-right-circle-fill" id="nextPage"></i>
+            <!-- <button id="nextPage">Siguiente</button> -->
+        </div>
+    </div>
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+    <div id="fondo-oscuro" class="fondo-oscuro"></div>
+    <div id="formulario-emergente" class="formulario-emergente">
+        <div style="margin-bottom: 8%;"><i class="bi bi-x-circle" id="btn-cerrar" style="float: right; font-size: 25px; color:#127848"></i></div>
+        <form class="form-registro nuevo-administrador" id="nuevoAdminForm">
+            <label for="nombre">
+                Nombre
+                <input type="text" class="bloque" name="nombre" id="nombre" placeholder="Nombre completo" required autocomplete="off">
+            </label>
+            <label for="Correo">
+                Correo
+                <input type="email" class="bloque" name="correo" id="correo" placeholder="Correo electrónico" required autocomplete="off">
+            </label>
+            <div class="doble-input">
+                <label for="cedula">
+                    Cédula
+                    <input type="text" class="linea" placeholder="Cédula" name="cedula" id="id" required autocomplete="off">
+                </label>
+                <label for="telefono">
+                    Teléfono
+                    <input type="number" class="linea" name="telefono" id="telefono" placeholder="Teléfono" required autocomplete="off">
+                </label>
+            </div>
+            <div class="btn-registrar">
+                <button class="btn-agregar" id="aggAdmin">Guardar</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ url_for('static', filename='javascript/ventanasEmergentes.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/scriptAdmin.js') }}"></script>
+</body>
+{% endblock %}
+</html>

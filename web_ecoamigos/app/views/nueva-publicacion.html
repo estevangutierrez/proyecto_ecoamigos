@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
+    <title>Nueva Publicacion</title>
+</head>
+<body>
+    <div class="cont-edit-publicacion">
+        <form id="form-n-publicacion" enctype="multipart/form-data">
+            <label for="titulo">Titulo:</label>
+            <input type="text" name="titulo" id="titulo-publicacion">
+            <label for="contenido">Contenido:</label>
+            <textarea name="contenido" id="contenido-publicacion" cols="30" rows="10"></textarea>
+            <label for="imagen">Imagen:</label>
+            <div class="custom-file-input"></div>
+            <input type="file" name="imagen" id="img-publicacion">
+            <button class="btn-agregar" id="btn-publicar">PUBLICAR</button>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../static/javascript/scriptNuevaPublicacion.js"></script>
+</body>
+</html>
+
+

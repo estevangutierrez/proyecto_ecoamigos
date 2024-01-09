@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/estilo-admin.css') }}">
+    <title>Actualizar datos</title>
+</head>
+<body>
+    <form action="/administradores/editar-administrador/{{ administrador[0] }}" method="POST" class="form-registro nuevo-administrador">
+        <label for="nombre" class="input-nombre input-cont">
+            <span>Nombre</span>
+            <input type="text" name="nombre" value="{{ administrador[1] }}" required autocomplete="off">
+        </label>
+        <label for="correo" class="input-correo input-cont">
+            <span>Correo</span>
+            <input type="email" name="correo" value="{{ administrador[2] }}" required autocomplete="off">
+        </label>
+        <label for="telefono" class="input-telefono input-cont">
+            <span>Telefono</span>
+            <input type="number" name="telefono" value="{{ administrador[3] }}" required autocomplete="off">
+        </label>
+        <div class="btn-registrar">
+            <button class="btn-agregar">Guardar cambios</button>
+        </div>
+    </form>
+    <script src="{{ url_for('static',filename='javascript/contDinamico.js') }}"></script>
+</body>
+</html>

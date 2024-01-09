@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
+    <title>Proveedores</title>
+</head>
+{% extends "administrador.html" %}
+{% block contenido_admin %}
+<body>
+    <div class="filtro">
+        <div class="input-filtro">
+            <input type="number" name="" id="">
+            <button id="btn-buscar-filtro"><i class="bi bi-search"></i></button>
+        </div>
+    </div>   
+    <div class="cont-tabla">
+        <table class="mostrar-publicaciones" >
+            <thead>
+                <tr>
+                    <th scoope="col">ID</th>
+                    <th scoope="col">Nombre</th>
+                    <th scoope="col">Correo</th>
+                    <th scoope="col">Teléfono</th>
+                    <th scoope="col">Comuna</th>
+                    <th scoope="col">Tipo</th>
+                    <th scoope="col">Estado</th>
+                    <th scoope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider tabla-mostrar" id="proveedor-tabla">
+                {% for proveedor in proveedores %}
+                <tr>
+                    <td>{{ proveedor.id_proveedor }}</td>
+                    <td>{{ proveedor.nombre }}</td>
+                    <td>{{ proveedor.correo }}</td>
+                    <td>{{ proveedor.celular }}</td>
+                    <td>COMUNA {{ proveedor.id_comuna }}</td>
+                    <td>{% if proveedor.tipo_prov == 1 %}
+                            PERSONA
+                        {% elif proveedor.tipo_prov == 2 %}
+                            EMPRESA
+                        {% endif %}
+                    </td>
+                    <td>{% if proveedor.estado == True %}
+                            ACTIVO
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination">
+            <!-- <button id="prevPage">Anterior</button> -->
+            <i class="bi bi-arrow-left-circle-fill" id="prevPage"></i>
+            <span id="currentPage">1</span>
+            <i class="bi bi-arrow-right-circle-fill" id="nextPage"></i>
+            <!-- <button id="nextPage">Siguiente</button> -->
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</body>
+{% endblock %}
+</html>

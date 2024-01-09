@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recolector</title>
+</head>
+<body>
+    <h1>PAGINA DEL RECOLECTOR</h1>
+    {% if current_user.is_authenticated %}
+    <h3>Hola, {{ current_user.nombre.split()[0].capitalize() }}</h3>
+    {% endif %}
+
+    <a href="{{ url_for('auth.logout') }}"><button>Cerrar sesión</button></a>
+</body>
+</html>

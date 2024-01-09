@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-index.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <title>Inicio - Ecofriendly S.A.S</title>
+</head>
+<body>
+    <header>
+        <div class="cont-header">
+            <div class="cont-logo">
+                <a href="{{ url_for('main.index') }}"><img src="{{ url_for('static', filename='imagenes/logo.png') }}" alt="este es el logo" class="logo"></a>
+            </div>
+            <div class="cont-redes">
+                <div class="contact tel">
+                    <i class="bi bi-telephone-fill"></i>
+                    <span>+57 300 420 0399</span>
+                </div>
+                <div class="contact">
+                    <i class="bi bi-envelope-fill"></i>
+                    <span>correo@dominio.si</span>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/Ecofriendymvdsas" target="_blank"><i class="bi bi-facebook"></i></a>
+                </div>
+                <div class="social">
+                    <a href="https://www.instagram.com/ecofriendly_mvd/" target="_blank"><i class="bi bi-instagram"></i></a>
+                </div>
+                <div class="social">
+                    <a href="#" target="_blank"><i class="bi bi-tiktok"></i></a>
+                </div>
+                <div class="login">
+                    <a href="{{ url_for('auth.pagina_login') }}"><i class="bi bi-person-circle"></i></a>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="menu-icon" id="menu-icon">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <ul class="nav-bar" id="nav-bar">
+                <li><a href="#">INICIO</a></li>
+                <li><a href="#">BLOG</a></li>
+                <li><a href="#nosotros">NOSOTROS</a></li>
+                <li><a href="#servicios">SERVICIOS</a></li>
+                <li class="dropdown">
+                    <a href="#comunidad" class="dropbtn">COMUNIDAD</a>
+                    <div class="dropdown-content">
+                        <a href="#comunidad">ALIADOS</a>
+                        <a href="#resenas">RESEÑAS</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>        
+    </header>
+    <main>
+        {% block contenido_home %}{% endblock %}
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="{{ url_for('static', filename='imagenes/logo.png') }}" alt="Logo">
+                <h2>MVD Ecofriendly S.A.S</h2>
+            </div>
+            <div class="footer-links">
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Nosotros</a></li>
+                    <li><a href="#">Servicios</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <a href="https://www.facebook.com/Ecofriendymvdsas" target="_blank"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.instagram.com/ecofriendly_mvd/" target="_blank"><i class="bi bi-instagram"></i></a>
+                <a href="#"><i class="bi bi-tiktok"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 MVD Ecofriendly S.A.S. Todos los derechos reservados.</p>
+        </div>
+    </footer>   
+</body>
+</html>

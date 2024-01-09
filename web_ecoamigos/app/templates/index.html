@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-index.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <title>Inicio - Ecofriendly MVD SAS</title>
+</head>
+{% extends "layout.html" %}
+{% block contenido_home %}
+<body>
+    <main>
+        <div class="cont-video">
+            <video src="{{ url_for('static', filename='imagenes/background-video.mp4')}}" muted autoplay loop></video>
+            <div class="leyenda-video">
+                <h1>CUIDEMOS NUESTRO PLANETA</h1>
+                <p>¡Somos tu mejor aliado a la hora de aportar al medio ambiente!</p>
+            </div>
+        </div>
+        <section>
+            <div class="encabezado" id="nosotros">
+                <div class="estadisticas">
+                    <div class="dato-estadistico">
+                        <div class="grafica">
+                            <img src="{{url_for('static', filename='imagenes/caja.png' )}}" alt="foto" class="img-estadistica">
+                        </div>
+                        <div>
+                            <div class="leyenda">
+                                <h3><b>234</b> Realizadas</h3>
+                            </div>
+                            <span>Recolecciones</span>
+                        </div>
+                    </div>
+                    <div class="dato-estadistico">
+                        <div class="grafica">
+                            <img src="{{url_for('static', filename='imagenes/aceite.png' )}}" alt="" class="img-estadistica">
+                        </div>
+                        <div>
+                            <div class="leyenda">
+                                <h3><b>32</b> Kg</h3>
+                            </div>
+                            <span>ACU recolectados</span>
+                        </div>
+                    </div>
+                    <div class="dato-estadistico">
+                        <div class="grafica">
+                            <img src="{{url_for('static', filename='imagenes/personas.png' )}}" alt="" class="img-estadistica">
+                        </div>
+                        <div>
+                            <div class="leyenda">
+                                <h3><b>32</b> Familias</h3>
+                            </div>
+                            <span>Contribuyendo</span>
+                        </div>
+                    </div>
+                </div>   
+            </div>
+            <div class="adorno"></div>
+        </section>
+        <section class="cont-nosotros">
+            <div>
+                <h3>Nuestra misión</h3>
+                <p>Dar cumplimiento a las obligaciones de la normativa vigente en materia de gestión de aceites vegetales usados, facilitando dicho cumplimiento a las empresas adheridas y los actores implicados a través de la puesta en marcha y funcionamiento de un sistema integrado de gestión que garantice la más eficaz gestión del residuo en toda Colombia, fomentando una conciencia de responsabilidad con nuestro ambiente.</p>
+            </div>
+            <div>
+                <h3>Nuestra visión</h3>
+                <p>Ser la empresa de referencia en la gestión y tratamiento del aceite vegetal usado en Colombia, distinguiéndonos por nuestro compromiso con la protección del medio ambiente creando productos innovadores y biodegradable amigables con el medio ambiente, también por la eficiencia en nuestros procesos de tratamiento final y por el cumplimiento de los objetivos ambientales que marca la normativa. Queremos hacer posible una sociedad más sostenible en la que la generación de aceite vegetal usado no sea nunca más un problema.</p>
+            </div>
+        </section>
+        <section class="cont-servicios" id="servicios">
+            <h2>SERVICIOS Y PRODUCTOS</h2>
+            <div id="carouselExampleIndicators" class="carousel slide">
+                <div class="carousel-indicators">
+                  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                </div>
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img src="{{ url_for('static', filename='imagenes/producto.jpg') }}" alt="" class="d-block w-50 m-auto">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>SERVICIO 1</h5>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <img src="{{ url_for('static', filename='imagenes/producto.jpg') }}" class="d-block w-50 m-auto" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>SERVICIO 2</h5>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque,<br> impedit nihil et perspiciatis reiciendis temporibus aperiam.</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <img src="{{ url_for('static', filename='imagenes/producto.jpg') }}" class="d-block w-50 m-auto" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>SERVICIO 3</h5>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <img src="{{ url_for('static', filename='imagenes/producto.jpg') }}" class="d-block w-50 m-auto" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>SERVICIO 4</h5>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+                    </div>
+                  </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </section>
+        <section class="cont-comunidad" id="comunidad">
+            <div>
+                <h2>COMUNIDAD</h2>
+                <div id="aliados">
+                    <h3>NUESTROS ALIADOS</h3>
+                    <div class="items-aliados slider">
+                        <div class="item-aliado slide" id="slide1">
+                            <img src="{{ url_for('static', filename='imagenes/minilogo.jpg') }}" alt="">
+                            <div class="descript">
+                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempore qui tenetur a eum</p>
+                            </div>
+                        </div>
+                        <div class="item-aliado slide" id="slide2">
+                            <img src="{{ url_for('static', filename='imagenes/minilogo.jpg') }}" alt="">
+                            <div class="descript">
+                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempore qui tenetur a eum</p>
+                            </div>
+                        </div>
+                        <div class="item-aliado slide" id="slide3">
+                            <img src="{{ url_for('static', filename='imagenes/minilogo.jpg') }}" alt="">
+                            <div class="descript">
+                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempore qui tenetur a eum,</p>
+                            </div>
+                        </div>
+                        <div class="item-aliado slide" id="slide3">
+                            <img src="{{ url_for('static', filename='imagenes/minilogo.jpg') }}" alt="">
+                            <div class="descript">
+                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempore qui tenetur a eum,</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cont-resenas" id="resenas">
+                    <h3>RESEÑAS</h3>
+                    <div class="resenas">
+                        <div class="resena-item">
+                            <div class="resena-header">
+                                <div class="resena-autor">Nombre del Autor</div>
+                                <div class="resena-fecha">Agosto 07 de 2023</div>
+                            </div>
+                            <div class="resena-contenido">
+                                <div class="resena-estrellas">
+                                    ★★★☆☆
+                                </div>
+                                <div class="resena-descripcion">
+                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Provident distinctio quisquam cupiditate sunt totam voluptatibus, corporis quidem eos sapiente. Dolore nostrum placeat, atque quos soluta cumque rerum magni? Nihil, fuga.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resena-item">
+                            <div class="resena-header">
+                                <div class="resena-autor">Nombre del Autor</div>
+                                <div class="resena-fecha">Agosto 07 de 2023</div>
+                            </div>
+                            <div class="resena-contenido">
+                                <div class="resena-estrellas">
+                                    ★★★★★
+                                </div>
+                                <div class="resena-descripcion">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam condimentum semper lobortis.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resena-item">
+                            <div class="resena-header">
+                                <div class="resena-autor">Nombre del Autor</div>
+                                <div class="resena-fecha">Agosto 07 de 2023</div>
+                            </div>
+                            <div class="resena-contenido">
+                                <div class="resena-estrellas">
+                                    ★★★★★
+                                </div>
+                                <div class="resena-descripcion">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam condimentum semper lobortis.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resena-item">
+                            <div class="resena-header">
+                                <div class="resena-autor">Nombre del Autor</div>
+                                <div class="resena-fecha">Agosto 07 de 2023</div>
+                            </div>
+                            <div class="resena-contenido">
+                                <div class="resena-estrellas">
+                                    ★★★★☆
+                                </div>
+                                <div class="resena-descripcion">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam condimentum semper lobortis.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resena-item">
+                            <div class="resena-header">
+                                <div class="resena-autor">Nombre del Autor</div>
+                                <div class="resena-fecha">Agosto 07 de 2023</div>
+                            </div>
+                            <div class="resena-contenido">
+                                <div class="resena-estrellas">
+                                    ★★★★☆
+                                </div>
+                                <div class="resena-descripcion">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam condimentum semper lobortis.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resena-item">
+                            <div class="resena-header">
+                                <div class="resena-autor">Nombre del Autor</div>
+                                <div class="resena-fecha">Agosto 07 de 2023</div>
+                            </div>
+                            <div class="resena-contenido">
+                                <div class="resena-estrellas">
+                                    ★★★★☆
+                                </div>
+                                <div class="resena-descripcion">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam condimentum semper lobortis.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pagination">
+                        <!-- <button id="prevPage">Anterior</button> -->
+                        <i class="bi bi-arrow-left-circle-fill" id="prevPage"></i>
+                        <span id="currentPage">1</span>
+                        <i class="bi bi-arrow-right-circle-fill" id="nextPage"></i>
+                        <!-- <button id="nextPage">Siguiente</button> -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="{{ url_for('static',filename='javascript/paginacion.js') }}"></script>
+</body>
+{% endblock %}
+</html>
