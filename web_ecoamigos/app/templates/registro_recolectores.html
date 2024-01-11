@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-registro-recolectores.css') }}">
+  <title>Document</title>
+</head>
+<body>
+  <div class="contenedor-formulario">
+  <form action="">
+    <div class="seccion-form">
+    <label for="tipo_proveedor">¿Qué tipo de proveedor eres</label>
+    <select name="tipo_proveedor" id="tipo_proveedor">
+      <option value="">Selecciona una</option>
+      <option value="0">Persona</option>
+      <option value="1">Empresa</option>
+    </select>
+    </div>
+    <div class="seccion-form">
+    <label for="id_proveedor">Numero de documento</label>
+    <input id="id_proveedor" name="id_proveedor" type="text">
+    </div>
+    <div class="seccion-form">
+    <label for="nombre_completo">Nombre completo</label>
+    <input id="nombre_completo" name="nombre_completo" type="text" pattern="{5,250}">
+    </div>
+    <div class="seccion-form">
+    <label for="correo">Correo electrónico</label>
+    <input type="email" name="correo" id="correo">
+    </div>
+    <div class="seccion-form">
+    <label for="celular">Celular</label>
+    <input type="tel" name="celular" id="celular">
+    </div>
+    <div class="seccion-form">
+    <label for="direccion">Dirección</label>
+    <input type="text" name="direccion" id="direccion" pattern="{5,250}">
+    </div>
+    <div class="seccion-form">
+    <label for="comuna">Comuna</label>
+    <select name="comuna" id="comuna">
+      <option value="">Selecciona una comuna</option>
+    </select>
+    </div>
+    <div class="seccion-form">
+    <label for="barrio">Barrio</label>
+    <select name="barrio" id="barrio">
+      <option value="">Seleccione un barrio</option>
+    </select>
+    </div>
+    <button class="">Registrarse</button>
+  </form>
+  </div>
+</body>
+</html>
