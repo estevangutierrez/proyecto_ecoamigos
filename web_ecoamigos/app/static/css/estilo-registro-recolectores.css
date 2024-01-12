@@ -1,0 +1,39 @@
+.contenedor-formulario{
+    background-color: rgb(227, 224, 224);
+    width: auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+form {
+    max-width: 370px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.seccion-form {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.seccion-form input, select{
+    padding: 7px;
+    margin-top: 5px;
+}
+
+button {
+    background-color: green;
+    color: white;
+    font-size: 0.8em;
+    width: auto;
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    align-self: flex-end;
+}
