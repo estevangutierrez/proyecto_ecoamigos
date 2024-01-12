@@ -35,9 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
             telefono.innerText = recolector.celular;
             comuna.innerText = 'COMUNA' + recolector.comuna;
             if(recolector.estado == true){
-                estado.innerText = 'ACTIVO'
+                estado.innerText = 'ACTIVO';
             } else {
                 estado.innerText = 'INACTIVO'
+                row.style.display = 'none';
             }
 
             row.appendChild(id);

@@ -14,6 +14,9 @@
             <input type="number" name="" id="">
             <button id="btn-buscar-filtro"><i class="bi bi-search"></i></button>
         </div>
+        <div>
+            <button class="btn-agregar nuevo-usuario">Registrar proveedor</button>
+        </div>
     </div>   
     <div class="cont-tabla">
         <table class="mostrar-publicaciones" >
@@ -58,8 +61,19 @@
             <i class="bi bi-arrow-right-circle-fill" id="nextPage"></i>
             <!-- <button id="nextPage">Siguiente</button> -->
         </div>
+        <div id="loadingOverlay">
+            <div class="spinner"></div>
+        </div>
+        <div id="fondo-oscuro" class="fondo-oscuro"></div>
+        <div id="formulario-emergente" class="formulario-emergente">
+            <div style="margin-bottom: 8%;"><i class="bi bi-x-circle" id="btn-cerrar" style="float: right; font-size: 25px; color:#127848"></i></div>
+            <form class="form-registro">
+            </form>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="{{ url_for('static', filename='javascript/scriptAdmin.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/ventanasEmergentes.js') }}"></script>
 </body>
 {% endblock %}
 </html>

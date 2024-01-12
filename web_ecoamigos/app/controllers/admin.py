@@ -73,22 +73,8 @@ def nuevo_administrador():
 @login_required
 def recolectores():
     comunas = Comuna.query.all()
-    return render_template('recolectores.html',comunas=comunas)
-
-@admin.route('/cargar_recolectores', methods=['GET'])
-@login_required
-def cargar_recolectores():
-    recolectores = Recolector.query.all()
-    recolectores_list = [{
-        'id': recolector.id_recolector,
-        'nombre': recolector.nombre,
-        'correo': recolector.correo,
-        'celular': recolector.celular,
-        'comuna': recolector.comuna,
-        'estado': recolector.estado
-    } for recolector in recolectores]
-
-    return jsonify(recolectores_list)
+    recolectores = Recolector.query.filter_by(estado=True)
+    return render_template('recolectores.html',comunas=comunas, recolectores=recolectores)
 
 #CREAR
 @admin.route('/nuevo_recolector',methods=['GET','POST'])
@@ -123,10 +109,10 @@ def nuevo_recolector():
 @admin.route('/proveedores')
 @login_required
 def proveedores():
-    return render_template('proveedores.html')
+    proveedores = Proveedor.query.all()
+    return render_template('proveedores.html',proveedores=proveedores)
 
 
-    
 #CREAR
 @admin.route('/nuevo_proveedor',methods=['GET','POST'])
 @login_required

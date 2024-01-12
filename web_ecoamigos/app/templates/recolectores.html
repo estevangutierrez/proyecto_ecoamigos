@@ -32,6 +32,19 @@
                 </tr>
             </thead>
             <tbody class="table-group-divider tabla-mostrar" id="recolector-tabla">
+                {% for recolector in recolectores %}
+                <tr>
+                    <td>{{ recolector.id_recolector }}</td>
+                    <td>{{ recolector.nombre }}</td>
+                    <td>{{ recolector.correo }}</td>
+                    <td>{{ recolector.celular }}</td>
+                    <td>COMUNA {{ recolector.id_comuna }}</td>
+                    <td>{% if recolector.estado == True %}
+                            ACTIVO
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
         <div class="pagination">
@@ -93,8 +106,8 @@
         </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ url_for('static', filename='javascript/scriptAdmin.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/ventanasEmergentes.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/scriptRecolectores.js') }}"></script>
 </body>
 {% endblock %}
 </html>
