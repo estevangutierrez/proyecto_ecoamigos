@@ -1,12 +1,14 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, session
 from flask_login import login_user, current_user, logout_user, login_required
 from app.models.usuarios import Usuario
+from app.models.models_barrios import Comuna
 
 auth = Blueprint('auth', __name__)
 
 @auth.route('/pagina_login')
 def pagina_login():
-    return render_template('login.html')
+    comunas = Comuna.query.all()
+    return render_template('login.html',comunas=comunas)
 
 
 @auth.route('/login', methods=['POST'])

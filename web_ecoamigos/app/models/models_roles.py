@@ -17,7 +17,7 @@ class Proveedor(db.Model):
     id_barrio       = db.Column(db.Integer, nullable=False)
     correo          = db.Column(db.String(250), nullable=False)
     celular         = db.Column(db.BigInteger, nullable=False)
-    puntos          = db.Column(db.Integer, nullable=False)
+    puntos          = db.Column(db.Integer)
     estado          = db.Column(db.Boolean, default=True)
 
 class Recolector(db.Model):

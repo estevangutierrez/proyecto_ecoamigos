@@ -1,7 +1,7 @@
 from flask import render_template, Blueprint, request, jsonify
 from app.models.usuarios import Usuario
 from app.models.models_roles import Administrador, Recolector, Proveedor
-from app.models.models_barrios import Comuna
+from app.models.models_barrios import Comuna, Barrio
 from flask_login import login_required
 from app.models import db
 
@@ -24,7 +24,8 @@ def admin_home():
 @admin.route('/administradores')
 @login_required
 def administradores():
-    return render_template('administradores.html')
+    administradores = Administrador.query.all()
+    return render_template('administradores.html', administradores=administradores)
 
 @admin.route('/cargar_administradores', methods=['GET'])
 @login_required
@@ -73,8 +74,9 @@ def nuevo_administrador():
 @login_required
 def recolectores():
     comunas = Comuna.query.all()
-    recolectores = Recolector.query.filter_by(estado=True)
-    return render_template('recolectores.html',comunas=comunas, recolectores=recolectores)
+    barrios = Barrio.query.all()
+    recolectores = Recolector.query.all()
+    return render_template('recolectores.html',comunas=comunas, recolectores=recolectores, barrios=barrios)
 
 #CREAR
 @admin.route('/nuevo_recolector',methods=['GET','POST'])
@@ -115,7 +117,6 @@ def proveedores():
 
 #CREAR
 @admin.route('/nuevo_proveedor',methods=['GET','POST'])
-@login_required
 def nuevo_proveedor():
     data = request.get_json()
 
@@ -128,15 +129,16 @@ def nuevo_proveedor():
     comuna = data.get('comuna')
     barrio = data.get('barrio')
     contrasena = 'prov123'
+    puntos = 0
     rol = 'PROVEEDOR'
 
-    user = Proveedor.query.filter_by(id=id).first()
+    user = Proveedor.query.filter_by(id_proveedor=id).first()
 
     if user:
         return jsonify({'success': False})
 
     nuevo_usuario = crear_usuario(id,nombre,rol,contrasena)
-    nuevo_proveedor = Proveedor(id_proveedor=int(id),tipo_prov=tipo,nombre=nombre,direccion=direccion,id_comuna=comuna,id_barrio=barrio,correo=correo,celular=telefono)
+    nuevo_proveedor = Proveedor(id_proveedor=int(id),tipo_prov=int(tipo),nombre=nombre,direccion=direccion,id_comuna=comuna,id_barrio=barrio,correo=correo,celular=telefono,puntos=puntos)
 
     db.session.add(nuevo_usuario)
     db.session.add(nuevo_proveedor)
