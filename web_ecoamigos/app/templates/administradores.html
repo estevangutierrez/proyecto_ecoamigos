@@ -31,6 +31,18 @@
                 </tr>
             </thead>
             <tbody class="table-group-divider tabla-mostrar" id="admin-tabla">
+                {% for administrador in administradores %}
+                <tr>
+                    <td>{{ administrador.id_admin }}</td>
+                    <td>{{ administrador.nombre }}</td>
+                    <td>{{ administrador.correo }}</td>
+                    <td>{{ administrador.celular }}</td>
+                    <td>{% if administrador.estado == True %}
+                            ACTIVO
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
         <div class="pagination">
