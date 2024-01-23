@@ -7,6 +7,14 @@ class Administrador(db.Model):
     celular     = db.Column(db.BigInteger, nullable=False)
     estado      = db.Column(db.Boolean, default=True)
 
+    def actualizar_datos(self, nuevos_datos):
+        self.nombre     = nuevos_datos.get('nombre', self.nombre)
+        self.correo     = nuevos_datos.get('correo', self.correo)
+        self.celular    = nuevos_datos.get('nombre', self.nombre)
+
+    def desactivar_usuario(self):
+        self.estado = False
+
 class Proveedor(db.Model):
     __tablename__ = 'proveedores'
     id_proveedor    = db.Column(db.Integer, primary_key=True)
@@ -20,6 +28,17 @@ class Proveedor(db.Model):
     puntos          = db.Column(db.Integer)
     estado          = db.Column(db.Boolean, default=True)
 
+    def actualizar_datos(self, nuevos_datos):
+        self.nombre         = nuevos_datos.get('nombre', self.nombre)
+        self.direccion      = nuevos_datos.get('direccion', self.direccion)
+        self.id_comuna      = nuevos_datos.get('comuna', self.id_comuna)
+        self.id_barrio      = nuevos_datos.get('barrio', self.id_barrio)
+        self.correo         = nuevos_datos.get('correo', self.correo)
+        self.celular        = nuevos_datos.get('celular', self.celular)
+
+    def desactivar_usuario(self):
+        self.estado = False
+
 class Recolector(db.Model):
     __tablename__ = 'recolectores'
     id_recolector   = db.Column(db.Integer, primary_key=True)
@@ -30,6 +49,17 @@ class Recolector(db.Model):
     correo          = db.Column(db.String(250), nullable=False)
     celular         = db.Column(db.BigInteger, nullable=False)
     estado          = db.Column(db.Boolean, default=True)
+
+    def actualizar_datos(self, nuevos_datos):
+        self.nombre         = nuevos_datos.get('nombre', self.nombre)
+        self.direccion      = nuevos_datos.get('direccion', self.direccion)
+        self.comuna         = nuevos_datos.get('comuna', self.comuna)
+        self.barrio         = nuevos_datos.get('barrio', self.barrio)
+        self.correo         = nuevos_datos.get('correo', self.correo)
+        self.celular        = nuevos_datos.get('celular', self.celular)
+
+    def desactivar_usuario(self):
+        self.estado = False
 
 
 

@@ -68,6 +68,25 @@ def nuevo_administrador():
 
     return jsonify({'success': True})
 
+#ACTUALIZAR
+@admin.route('/administrador/<int:id_admin>')
+def actualizar_administrador(id_admin):
+    administrador = Administrador.query.get(id_admin)
+
+    if administrador is None:
+        return jsonify({'error':'Administrador no encontrado'}), 404
+    
+    nuevos_datos = request.json
+    administrador.actualizar_datos(nuevos_datos)
+
+    try:
+        db.session.commit()
+        return jsonify({'mensaje': 'Administrador actualizado correctamente'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Error al actualizar el administrador'}), 500
+    finally:
+        db.session.close()
 
 #LEER
 @admin.route('/recolectores')
@@ -108,6 +127,25 @@ def nuevo_recolector():
 
     return jsonify({'success': True})
 
+@admin.route('/recolector/<int:id_recolector>')
+def actualizar_recolector(id_recolector):
+    recolector = Recolector.query.get(id_recolector)
+
+    if recolector is None:
+        return jsonify({'error':'recolector no encontrado'}), 404
+    
+    nuevos_datos = request.json
+    recolector.actualizar_datos(nuevos_datos)
+
+    try:
+        db.session.commit()
+        return jsonify({'mensaje': 'recolector actualizado correctamente'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Error al actualizar el recolector'}), 500
+    finally:
+        db.session.close()
+
 @admin.route('/proveedores')
 @login_required
 def proveedores():
@@ -145,3 +183,22 @@ def nuevo_proveedor():
     db.session.commit()
 
     return jsonify({'success': True})
+
+@admin.route('/proveedor/<int:id_admin>')
+def actualizar_recolector(id_recolector):
+    recolector = Recolector.query.get(id_recolector)
+
+    if recolector is None:
+        return jsonify({'error':'recolector no encontrado'}), 404
+    
+    nuevos_datos = request.json
+    recolector.actualizar_datos(nuevos_datos)
+
+    try:
+        db.session.commit()
+        return jsonify({'mensaje': 'recolector actualizado correctamente'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Error al actualizar el recolector'}), 500
+    finally:
+        db.session.close()
