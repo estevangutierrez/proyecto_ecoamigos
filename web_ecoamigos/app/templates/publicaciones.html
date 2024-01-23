@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% extends "administrador.html" %}
+{% block contenido_admin %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
+    <title>Publicaciones</title>
+</head>
+<body>
+        <div class="filtro">
+            <div class="input-filtro">
+                <select name="" id="">
+                    <option value="default"></option>
+                    <option value="">Autor 1</option>
+                    <option value="">Autor 2</option>
+                    <option value="">Autor 3</option>
+                </select>
+                <input type="date" name="" id="">
+                <button id="btn-buscar-filtro"><i class="bi bi-search"></i></button>
+            </div>
+            <div>
+                <button  class="btn-agregar nuevo-usuario">Nueva Publicacion</button>
+            </div>
+        </div>   
+        <div class="cont-tabla">
+            <table class="mostrar-publicaciones" >
+                <thead>
+                    <tr>
+                        <th scoope="col">ID</th>
+                        <th scoope="col">Titulo</th>
+                        <th scoope="col">Fecha</th>
+                        <th scoope="col">Autor</th>
+                        <th scoope="col"></th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider tabla_mostrar" id="publicaciones-cont"> 
+                    {% for noticia in noticias %}
+                    <tr>
+                        <td>{{ noticia.id_noticia }}</td>
+                        <td>{{ noticia.titulo }}</td>
+                        <td>{{ noticia.fecha }}</td>
+                        <td>{{ noticia.id_admin }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="pagination">
+                <!-- <button id="prevPage">Anterior</button> -->
+                <i class="bi bi-arrow-left-circle-fill" id="prevPage"></i>
+                <span id="currentPage">1</span>
+                <i class="bi bi-arrow-right-circle-fill" id="nextPage"></i>
+                <!-- <button id="nextPage">Siguiente</button> -->
+            </div>
+        </div>
+        <div id="loadingOverlay">
+            <div class="spinner"></div>
+        </div>
+        <div id="fondo-oscuro" class="fondo-oscuro"></div>
+        <div class="formulario-emergente cont-edit-publicacion" id="formulario-emergente">
+            <div style="margin-bottom: 8%;"><i class="bi bi-x-circle" id="btn-cerrar" style="float: right; font-size: 25px; color:#127848"></i></div>
+            <form id="form-n-publicacion" enctype="multipart/form-data">
+                <label for="titulo">Titulo:</label>
+                <input type="text" name="titulo" id="titulo-publicacion">
+                <label for="contenido">Contenido:</label>
+                <textarea name="contenido" id="contenido-publicacion" cols="30" rows="10"></textarea>
+                <label for="imagen">Imagen:</label>
+                <div class="custom-file-input"></div>
+                <input type="file" name="imagen" id="img-publicacion">
+                <button class="btn-agregar" id="btn-publicar">PUBLICAR</button>
+            </form>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script src="{{ url_for('static', filename='javascript/ventanasEmergentes.js') }}"></script>
+        <script src="{{ url_for('static', filename='javascript/scriptPublicaciones.js') }}"></script>
+
+</body>
+</html>
+{% endblock %}

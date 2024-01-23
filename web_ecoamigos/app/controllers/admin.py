@@ -2,6 +2,7 @@ from flask import render_template, Blueprint, request, jsonify
 from app.models.usuarios import Usuario
 from app.models.models_roles import Administrador, Recolector, Proveedor
 from app.models.models_barrios import Comuna, Barrio
+from app.models.models_publico import Noticia
 from flask_login import login_required
 from app.models import db
 
@@ -13,6 +14,12 @@ def crear_usuario(id, nombre, rol, contrasena):
     nuevo_usuario.ingresar_contrasena(contrasena)
 
     return nuevo_usuario
+
+@admin.route('/publicaciones')
+@login_required
+def publicaciones():
+    noticias = Noticia.query.all()
+    return render_template('publicaciones.html', noticias=noticias)
 
 @admin.route('/admin_home')
 @login_required
@@ -184,21 +191,21 @@ def nuevo_proveedor():
 
     return jsonify({'success': True})
 
-@admin.route('/proveedor/<int:id_admin>')
-def actualizar_recolector(id_recolector):
-    recolector = Recolector.query.get(id_recolector)
+@admin.route('/proveedor/<int:id_proveedor>')
+def actualizar_proveedor(id_proveedor):
+    proveedor = Recolector.query.get(id_proveedor)
 
-    if recolector is None:
-        return jsonify({'error':'recolector no encontrado'}), 404
+    if proveedor is None:
+        return jsonify({'error':'Proveedor no encontrado'}), 404
     
     nuevos_datos = request.json
-    recolector.actualizar_datos(nuevos_datos)
+    proveedor.actualizar_datos(nuevos_datos)
 
     try:
         db.session.commit()
-        return jsonify({'mensaje': 'recolector actualizado correctamente'})
+        return jsonify({'mensaje': 'Proveedor actualizado correctamente'})
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': 'Error al actualizar el recolector'}), 500
+        return jsonify({'error': 'Error al actualizar el proveedor'}), 500
     finally:
         db.session.close()

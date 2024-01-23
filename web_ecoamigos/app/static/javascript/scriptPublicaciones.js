@@ -1,6 +1,10 @@
 const botonPublicar = document.getElementById('btn-publicar');
 
-botonPublicar.addEventListener('click', () => enviarDatos());
+botonPublicar.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log("clickkkkkkkkk")
+    enviarDatos();
+});
 
 function enviarDatos() {
     let titulo = document.getElementById('titulo-publicacion').value;
@@ -37,7 +41,7 @@ function enviarJSON(jsonData) {
     fetch('/crear_publicacion', {
         method: 'POST',
         headers: {
-            'Content-Type': 'applicaton/json',
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(jsonData),
     })

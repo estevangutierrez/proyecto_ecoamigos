@@ -10,6 +10,12 @@ class Noticia(db.Model):
     fecha           = db.Column(db.DateTime(timezone=True), default=func.now())
     recurso         = db.Column(LargeBinary, nullable=False)
 
+    @classmethod
+    def agregar_noticia(cls, noticia_data):
+        nueva_noticia = cls(**noticia_data)
+        db.session.add(nueva_noticia)
+        db.session.commit()
+
 class Resena(db.Model):
     __tablename__ = 'resenas'
     id_resena       = db.Column(db.Integer, primary_key=True, autoincrement=True)
