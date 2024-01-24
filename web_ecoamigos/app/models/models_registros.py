@@ -7,7 +7,8 @@ class Solicitud(db.Model):
     id_proveedor    = db.Column(db.Integer, ForeignKey('proveedores.id_proveedor'), nullable=False)
     fecha_solicitud = db.Column(db.DateTime, default=func.now())
     cantidad_aprox  = db.Column(db.Integer, nullable=False)
-    estado          = db.Column(db.Boolean, default=True)
+    estado          = db.Column(db.String(20), nullable=False, default='pendiente')
+    detalle         = db.Column(db.String(250))
 
 class Visita(db.Model):
     __tablename__ = 'visitas'
@@ -24,7 +25,7 @@ class Certificado(db.Model):
     id_proveedor    = db.Column(db.Integer, ForeignKey('proveedores.id_proveedor'), nullable=False)
     id_admin        = db.Column(db.Integer, ForeignKey('administradores.id_admin'), nullable=False)
     fecha           = db.Column(db.DateTime, default=func.now())
-    tipo            = db.Column(db.String(15, nullable=False))
+    tipo            = db.Column(db.String(15), nullable=False)
     
           
 
