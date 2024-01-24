@@ -21,8 +21,10 @@
     </div>
     <nav>
         <ul class="nav-bar">
+            {% if current_user.rol == 'ADMINISTRADOR' %}
             <li id="opc-pub"><a href="{{ url_for('admin.publicaciones') }}">Publicaciones</a></li>
             <li id="opc-sol"><a href="#">Solicitudes</a></li>
+            <li id=""><a href="">Certificados</a></li>
             <li class="dropdown">
                 Usuarios
                 <div class="dropdown-content">
@@ -33,6 +35,16 @@
                     </ul>
                 </div>
             </li>
+            {% elif current_user.rol == 'RECOLECTOR' %}
+            <li id=""><a href="">Perfil</a></li>
+            <li id=""><a href="">Solicitudes</a></li>
+            <li id=""><a href="">Historial</a></li>
+            {% elif current_user.rol == 'PROVEEDOR'%}
+            <li id=""><a href="">Perfil</a></li>
+            <li id=""><a href="">Puntos</a></li>
+            <li id=""><a href="">Solicitudes</a></li>
+            <li id=""><a href="">Certificados</a></li>
+            {% endif %}
         </ul>
     </nav>
   </aside>

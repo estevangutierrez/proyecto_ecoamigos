@@ -4,6 +4,7 @@ from app.models.models_roles import Administrador, Recolector, Proveedor
 from app.models.models_barrios import Comuna, Barrio
 from app.models.models_publico import Noticia
 from flask_login import login_required
+from app import roles_required
 from app.models import db
 
 admin = Blueprint('admin', __name__)
@@ -17,12 +18,14 @@ def crear_usuario(id, nombre, rol, contrasena):
 
 @admin.route('/publicaciones')
 @login_required
+@roles_required('ADMINISTRADOR')
 def publicaciones():
     noticias = Noticia.query.all()
     return render_template('publicaciones.html', noticias=noticias)
 
 @admin.route('/admin_home')
 @login_required
+@roles_required('ADMINISTRADOR')
 def admin_home():
     return render_template('administrador.html')
 
@@ -30,12 +33,14 @@ def admin_home():
 #LEER
 @admin.route('/administradores')
 @login_required
+@roles_required('ADMINISTRADOR')
 def administradores():
     administradores = Administrador.query.all()
     return render_template('administradores.html', administradores=administradores)
 
 @admin.route('/cargar_administradores', methods=['GET'])
 @login_required
+@roles_required('ADMINISTRADOR')
 def cargar_administradores():
     administradores = Administrador.query.all()
     administradores_list = [{
@@ -51,6 +56,7 @@ def cargar_administradores():
 #CREAR
 @admin.route('/nuevo_administrador',methods=['GET','POST'])
 @login_required
+@roles_required('ADMINISTRADOR')
 def nuevo_administrador():
     data = request.get_json()
 
@@ -77,6 +83,8 @@ def nuevo_administrador():
 
 #ACTUALIZAR
 @admin.route('/administrador/<int:id_admin>')
+@login_required
+@roles_required('ADMINISTRADOR')
 def actualizar_administrador(id_admin):
     administrador = Administrador.query.get(id_admin)
 
@@ -98,6 +106,7 @@ def actualizar_administrador(id_admin):
 #LEER
 @admin.route('/recolectores')
 @login_required
+@roles_required('ADMINISTRADOR')
 def recolectores():
     comunas = Comuna.query.all()
     barrios = Barrio.query.all()
@@ -107,6 +116,7 @@ def recolectores():
 #CREAR
 @admin.route('/nuevo_recolector',methods=['GET','POST'])
 @login_required
+@roles_required('ADMINISTRADOR')
 def nuevo_recolector():
     data = request.get_json()
 
@@ -135,6 +145,8 @@ def nuevo_recolector():
     return jsonify({'success': True})
 
 @admin.route('/recolector/<int:id_recolector>')
+@login_required
+@roles_required('ADMINISTRADOR')
 def actualizar_recolector(id_recolector):
     recolector = Recolector.query.get(id_recolector)
 
@@ -155,6 +167,7 @@ def actualizar_recolector(id_recolector):
 
 @admin.route('/proveedores')
 @login_required
+@roles_required('ADMINISTRADOR')
 def proveedores():
     proveedores = Proveedor.query.all()
     return render_template('proveedores.html',proveedores=proveedores)
@@ -192,6 +205,8 @@ def nuevo_proveedor():
     return jsonify({'success': True})
 
 @admin.route('/proveedor/<int:id_proveedor>')
+@login_required
+@roles_required('ADMINISTRADOR')
 def actualizar_proveedor(id_proveedor):
     proveedor = Recolector.query.get(id_proveedor)
 

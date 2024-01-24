@@ -5,6 +5,21 @@ from flask_login import LoginManager
 from app.models import db
 from flask import render_template
 
+from functools import wraps
+from flask import current_app, abort
+from flask_login import current_user
+
+def roles_required(roles):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if current_user.rol not in roles:
+                # El usuario no tiene el rol necesario, se le niega el acceso
+                abort(403)  # Puedes personalizar este código de error según tus necesidades
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
+
 app = Flask(__name__)
 app.config.from_object(Config)
 app.config['SECRET_KEY']='eaaaR/5mM222%#2298Tf'
