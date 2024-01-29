@@ -1,0 +1,119 @@
+.contendor-dashboard {
+    display: flex;
+    width: 97%;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+}
+
+.puntos {
+    width: 40%;
+    background-color: #fcb42f8c;
+    padding: 3%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1%;
+    border-radius: 10px;
+}
+
+.numero-puntos{
+    font-size: 3rem;
+    color: white;
+    background-color: #d79039;
+    border-radius: 100%;
+    padding: 15px 10px;
+}
+
+.texto-puntos {
+    font-size: 1.5rem;
+    color: rgb(255, 255, 255);
+}
+
+.recoleccionpendiente {
+    width: 43%;
+    background-color: #fcb42f3b;
+    padding: 3%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1%;
+    border-radius: 10px;
+}
+
+.estado-recoleccion {
+    font-size: 3rem;
+    color: white;
+    background-color: #d79039;
+    border-radius: 17px;
+    padding: 15px 10px;
+}
+
+.texto-recoleccion {
+    font-size: 1.5rem;
+    color: rgb(0, 0, 0);
+}
+
+.contenedor-historialrecolecciones {
+    width: 87.5%;
+    background-color: #12784859;
+    padding: 4.5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1%;
+    border-radius: 10px;
+}
+
+.contenedor-historialrecolecciones p {
+    font-size: 2rem;
+}
+
+.contenedor-historialrecolecciones table {
+    padding: 10px;
+}
+
+.contenedor-historialrecolecciones th {
+    padding: 12px;
+    background-color: aquamarine;
+    border-radius: 5px;
+}
+
+.contenedor-pop-up[open] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-solicitud {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenedor-pop-up p, .form-solicitud label {
+    background-color: white;
+    margin: 2em;
+}
+
+.contenedor-pop-up button {
+    margin: 1em;
+}
+
+.contenedor-pop-up > button {
+    align-self: flex-end;
+    margin: 4em;
+}
+
+@media screen and (max-width: 764px) {
+    .puntos {
+        width: 88%;
+    }
+
+    .recoleccionpendiente {
+        width: 88%;
+    }
+}
