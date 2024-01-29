@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-dashboard-flex.css') }}">
+    <title>Document</title>
+</head>
+<body>
+    <dialog id="contenedor-emergente" class="contenedor-pop-up">
+        <button id="boton-cerrar" type="button">Cerrar</button>
+        <p>Señor(a) <span>Fulanito/a de tal</span></p>
+        <form class="form-solicitud">
+            <label for="cantidad-aceite">¿Cuánto aceite necesita que le recolecten?</label>
+            <input id="cantidad-aceite" type="number">
+            <label for="observaciones">Observaciones</label>
+            <textarea name="" id="observaciones" cols="30" rows="10"></textarea>
+            <button type="submit">Solicitar recolección</button>
+        </form>
+    </dialog>
+    <div class="contendor-dashboard">
+        <div class="puntos">
+            <p class="texto-puntos">Tienes</p>
+            <p class="numero-puntos">999</p>
+            <p class="texto-puntos">Puntos</p>
+            <button type="button">Canjear Puntos</button>
+        </div>
+        <div class="recoleccionpendiente">
+            <p class="texto-recoleccion">Recolección pendiente</p>
+            <p class="estado-recoleccion">Ninguna</p>
+            <p class="texto-recoleccion">¿Tiene aceite para ser reciclado?</p>
+            <button id="solicitador-recolecta" type="button">¡Tengo aceite!</button>
+        </div>
+        <div class="contenedor-historialrecolecciones">
+            <p>Historial de recolecciones</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Cantidad aceite</th>
+                        <th>Puntos recibidos</th>
+                    </tr>
+                </thead>
+                <tbody id="historial-recolecciones">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static',filename='javascript/dashboard.js') }}"></script>
+</body>
+</html>
