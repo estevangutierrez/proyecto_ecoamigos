@@ -14,8 +14,7 @@ def roles_required(roles):
         @wraps(func)
         def wrapper(*args, **kwargs):
             if current_user.rol not in roles:
-                # El usuario no tiene el rol necesario, se le niega el acceso
-                abort(403)  # Puedes personalizar este código de error según tus necesidades
+                abort(403)
             return func(*args, **kwargs)
         return wrapper
     return decorator

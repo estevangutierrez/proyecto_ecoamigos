@@ -4,32 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-dashboard-flex.css') }}">
-    <title>Document</title>
+    <title>Proveedor</title>
 </head>
+{% extends "administrador.html" %}
+{% block contenido_admin %}
 <body>
     <dialog id="contenedor-emergente" class="contenedor-pop-up">
-        <button id="boton-cerrar" type="button">Cerrar</button>
-        <p>Señor(a) <span>Fulanito/a de tal</span></p>
+        <i class="bi bi-x-circle" id="boton-cerrar" style="float: right; font-size: 25px; color:#127848"></i>
+        <p>Señor(a) <span><b>{{ proveedor.nombre.split()[0].capitalize() }} {{ proveedor.nombre.split()[1].capitalize() }}</b></span></p>
+        <p style="text-align: center;">Usted está a punto de enviar una solicitud de recolección,<br><b>recuerde que la solicitud será atendida<br>dentro de las próximas 48 horas hábiles.</b>.</p>
         <form class="form-solicitud">
-            <label for="cantidad-aceite">¿Cuánto aceite necesita que le recolecten?</label>
+            <label for="cantidad-aceite">Cantidad aproximada<br>(en litros)</label>
             <input id="cantidad-aceite" type="number">
-            <label for="observaciones">Observaciones</label>
+            <label for="observaciones">Detalles</label>
             <textarea name="" id="observaciones" cols="30" rows="10"></textarea>
-            <button type="submit">Solicitar recolección</button>
+            <button type="submit" id="enviar-btn">Solicitar recolección</button>
         </form>
     </dialog>
     <div class="contendor-dashboard">
         <div class="puntos">
-            <p class="texto-puntos">Tienes</p>
-            <p class="numero-puntos">999</p>
-            <p class="texto-puntos">Puntos</p>
+            <p class="texto-puntos">Tus puntos</p>
+            <p class="numero-puntos">{{ proveedor.puntos }}</p>
             <button type="button">Canjear Puntos</button>
         </div>
         <div class="recoleccionpendiente">
-            <p class="texto-recoleccion">Recolección pendiente</p>
-            <p class="estado-recoleccion">Ninguna</p>
-            <p class="texto-recoleccion">¿Tiene aceite para ser reciclado?</p>
-            <button id="solicitador-recolecta" type="button">¡Tengo aceite!</button>
+            {% if solicitud_p %}
+                <p class="texto-recoleccion">Usted tiene una solicitud pendiente<br>
+                    <b>ID:</b> {{ solicitud_p.id_solicitud }}<br>
+                    <b>Fecha:</b> {{ solicitud_p.fecha_solicitud }}<br>
+                    <b>Estado:</b> {% if solicitud_p.estado.isnumeric() %}aceptada{% else %}{{ solicitud_p.estado }}{% endif %}
+                </p>
+            {% else %}
+                <p class="texto-recoleccion">Usted no tiene solicitudes pendientes.</p>
+            {%endif%}
+            <button id="solicitador-recolecta" type="button">Solicitar recoleccion</button>
         </div>
         <div class="contenedor-historialrecolecciones">
             <p>Historial de recolecciones</p>
@@ -47,7 +55,9 @@
             </table>
         </div>
     </div>
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ url_for('static',filename='javascript/dashboard.js') }}"></script>
+    <script src="{{ url_for('static',filename='javascript/crearSolicitud.js') }}"></script>
 </body>
+{% endblock %}
 </html>

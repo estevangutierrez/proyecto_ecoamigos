@@ -10,6 +10,9 @@ class Solicitud(db.Model):
     estado          = db.Column(db.String(20), nullable=False, default='pendiente')
     detalle         = db.Column(db.String(250))
 
+    def aceptar_solicitud(self, id_recolector):
+        self.estado = id_recolector
+
 class Visita(db.Model):
     __tablename__ = 'visitas'
     id_visita           = db.Column(db.Integer, primary_key=True, autoincrement=True)

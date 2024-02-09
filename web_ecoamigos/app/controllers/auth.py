@@ -32,7 +32,7 @@ def login():
         elif user.rol == 'PROVEEDOR':
             return jsonify({'success': True, 'redirect_url': url_for('proveedor.proveedor_home')})
         
-        return jsonify({'success': False})
+    return jsonify({'success': False})
 
 @auth.route('/logout')
 @login_required

@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => {
             console.log(error)
             Swal.fire('¡Ups!','Ha ocurrido un error','error');
+            loadingOverlay.style.display = 'none';
         })
     });
 })

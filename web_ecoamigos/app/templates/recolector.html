@@ -3,14 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
     <title>Recolector</title>
 </head>
+{% extends "administrador.html" %}
+{% block contenido_admin %}
 <body>
-    <h1>PAGINA DEL RECOLECTOR</h1>
-    {% if current_user.is_authenticated %}
-    <h3>Hola, {{ current_user.nombre.split()[0].capitalize() }}</h3>
-    {% endif %}
-
-    <a href="{{ url_for('auth.logout') }}"><button>Cerrar sesión</button></a>
+    <div class="cont-tabla">
+        <h2>SOLICITUDES ASIGNADAS</h2>
+        <table class="mostrar-publicaciones">
+            <thead>
+                <tr>
+                    <th scoope="col">ID de solicitud</th>
+                    <th scoope="col">Fecha</th>
+                    <th scoope="col">Proveedor</th>
+                    <th scoope="col">Comuna</th>
+                    <th scoope="col">Barrio</th>
+                    <th scoope="col">Direccion</th>
+                    <th scoope="col">Cantidad</th>
+                    <th scoope="col">Detalle</th>
+                    <th scoope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider tabla-mostrar" id="proveedor-tabla">
+                {% for solicitud in solicitudes %}
+                    {% if solicitud.estado|int == current_user.id %}
+                        <tr>
+                            <td>{{ solicitud.id_solicitud }}</td>
+                            <td>{{ solicitud.fecha }}</td>
+                            <td>{{ solicitud.proveedor }}</td>
+                            <td>{{ solicitud.comuna }}</td>
+                            <td>{{ solicitud.barrio }}</td>
+                            <td>{{ solicitud.direccion }}</td>
+                            <td>{{ solicitud.cantidad }} Litros</td>
+                            <td>{{ solicitud.detalle }}</td>
+                            <td><button class="btn-agregar">Abrir</button></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="cont-tabla">
+        <h2>SOLICITUDES DISPONIBLES</h2>
+        <table class="mostrar-publicaciones" id="solicitudes-p-tabla" >
+            <thead>
+                <tr>
+                    <th scoope="col">ID de solicitud</th>
+                    <th scoope="col">Fecha</th>
+                    <th scoope="col">Proveedor</th>
+                    <th scoope="col">Comuna</th>
+                    <th scoope="col">Barrio</th>
+                    <th scoope="col">Direccion</th>
+                    <th scoope="col">Cantidad</th>
+                    <th scoope="col">Detalle</th>
+                    <th scoope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider tabla-mostrar" id="proveedor-tabla">
+                {% for solicitud in solicitudes %}
+                    {% if solicitud.estado == 'pendiente' %}
+                        <tr>
+                            <td>{{ solicitud.id_solicitud }}</td>
+                            <td>{{ solicitud.fecha }}</td>
+                            <td>{{ solicitud.proveedor }}</td>
+                            <td>{{ solicitud.comuna }}</td>
+                            <td>{{ solicitud.barrio }}</td>
+                            <td>{{ solicitud.direccion }}</td>
+                            <td>{{ solicitud.cantidad }} Litros</td>
+                            <td>{{ solicitud.detalle }}</td>
+                            <td><button class="aceptar-btn btn-agregar" data-id="{{ solicitud.id_solicitud }}">Aceptar</button></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="{{ url_for('static',filename='javascript/aceptarSolicitud.js') }}"></script>
 </body>
+{% endblock %}
 </html>

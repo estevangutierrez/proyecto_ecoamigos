@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css')}}">
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-registro-recolectores.css') }}"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-registro-recolectores.css') }}">
+    <link rel="icon" href="{{ url_for('static',filename='imagenes/minilogo.png')}}" type="image/x-icon">
     <title>Inicia sesion - Ecofriendly</title>
 </head>
-<body style="padding-top: 12%; overflow: hidden">
+<body style="padding-top: 12%; overflow: hidden" class="login-back">
+    <div style="margin: 8%; margin-top: -10%;"><a href="{{ url_for('main.index') }}"><i class="bi bi-arrow-left-square-fill" style="float: left; font-size: 35px; color:#127848"></i></a></div>
     <div class="cont-login">
         <h3>Login</h3>
         <form id="loginForm">
             <div class="label-login">
                 <label for="">Usuario</label>
-                <input type="text" name="username" id="username" placeholder="Usuario" autocomplete="off" style="width: 100%;">
+                <input type="number" name="username" id="username" placeholder="Usuario" autocomplete="off" style="width: 100%;">
             </div>
             <div class="label-login">
                 <label for="">Contraseña</label>
@@ -40,30 +42,34 @@
           <div class="seccion-form">
           <label for="tipo_proveedor">¿Qué tipo de proveedor eres</label>
           <select name="tipo_proveedor" id="tipo_proveedor">
-            <option value="">Selecciona una</option>
+            <option value="" disabled selected>Selecciona una</option>
             <option value="1">Persona</option>
             <option value="2">Empresa</option>
           </select>
           </div>
           <div class="seccion-form">
-          <label for="id_proveedor">Numero de documento</label>
-          <input id="id_proveedor" name="id_proveedor" type="text">
+          <label for="id_proveedor">Numero de documento(CC o NIT)</label>
+          <input id="id_proveedor" name="id_proveedor" type="text"  class="input-reg">
           </div>
           <div class="seccion-form">
           <label for="nombre_completo">Nombre completo</label>
-          <input id="nombre_completo" name="nombre_completo" type="text" pattern="{5,250}">
+          <input id="nombre_completo" name="nombre_completo" type="text" pattern="{5,250}"  class="input-reg">
           </div>
           <div class="seccion-form">
           <label for="correo">Correo electrónico</label>
-          <input type="email" name="correo" id="correo">
+          <input type="email" name="correo" id="correo"  class="input-reg i-correo">
           </div>
           <div class="seccion-form">
+            <label for="correo">Repita el correo electrónico</label>
+            <input type="email" name="correo" id="correo-v"  class="input-reg i-correo">
+            </div>
+          <div class="seccion-form">
           <label for="celular">Celular</label>
-          <input type="tel" name="celular" id="celular">
+          <input type="tel" name="celular" id="celular"  class="input-reg">
           </div>
           <div class="seccion-form">
           <label for="direccion">Dirección</label>
-          <input type="text" name="direccion" id="direccion" pattern="{5,250}">
+          <input type="text" name="direccion" id="direccion" pattern="{5,250}"  class="input-reg">
           </div>
           <div class="seccion-form">
           <label for="comuna">Comuna</label>

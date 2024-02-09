@@ -12,7 +12,9 @@ proveedor = Blueprint('proveedor', __name__)
 @login_required
 @roles_required('PROVEEDOR')
 def proveedor_home():
-    return render_template('administrador.html')
+    proveedor = Proveedor.query.get(current_user.id)
+    solicitud_p = db.session.query(Solicitud).filter(Solicitud.id_proveedor==proveedor.id_proveedor,Solicitud.estado!='finalizado').first()
+    return render_template('dashboard_grid.html', proveedor=proveedor,solicitud_p=solicitud_p)
 
 @proveedor.route('/proveedor/solicitudes')
 @login_required
@@ -27,6 +29,11 @@ def enviar_solicitud():
     datos = request.get_json()
     id = current_user.id
     proveedor = Proveedor.query.filter_by(id_proveedor=id).first()
+    solicitud_pendiente = db.session.query(Solicitud).filter(Solicitud.id_proveedor==id,Solicitud.estado!='finalizado').first()
+    print(solicitud_pendiente)
+
+    if solicitud_pendiente:
+        return jsonify({'existe':'Solicitud existente'})
 
     id_proveedor = proveedor.id_proveedor
     fecha_solicitud = datetime.now()
@@ -44,10 +51,10 @@ def enviar_solicitud():
 
     try:
         db.session.commit()
-        return jsonify({'mensaje':'Solicitud creada exitosamente'})
+        return jsonify({'ok':'Solicitud creada exitosamente'})
     except Exception as e:
         db.session.rollback()
-        return jsonify({'mensaje':'Error al crear la solicitud'}), 500
+        return jsonify({'error':'Error al crear la solicitud'}), 500
     finally:
         db.session.close()
 

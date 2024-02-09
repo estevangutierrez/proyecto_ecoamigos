@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
+  <link rel="icon" href="{{ url_for('static',filename='imagenes/minilogo.png')}}" type="image/x-icon">
   <title>Administrador</title>
 </head>
 <body id="admin-p">
@@ -41,8 +42,8 @@
             <li id=""><a href="">Historial</a></li>
             {% elif current_user.rol == 'PROVEEDOR'%}
             <li id=""><a href="">Perfil</a></li>
-            <li id=""><a href="">Puntos</a></li>
-            <li id=""><a href="{{ url_for('proveedor.cargar_solicitudes') }}">Solicitudes</a></li>
+            <li id=""><a href="">Canjeos</a></li>
+            <li id=""><a href="">Recolecciones</a></li>
             <li id=""><a href="">Certificados</a></li>
             {% endif %}
         </ul>
