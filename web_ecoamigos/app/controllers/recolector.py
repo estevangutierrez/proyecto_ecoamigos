@@ -34,7 +34,6 @@ def recolector_home():
         solicitudes.append(data_dict)        
 
     
-    print(data_dict)
     return render_template("recolector.html",solicitudes=solicitudes)
 
 # @recolector.route('/recolector/solicitudes')

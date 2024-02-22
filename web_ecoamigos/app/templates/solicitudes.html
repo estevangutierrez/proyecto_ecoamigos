@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
+    <title>Solicitudes</title>
+</head>
+{% extends "administrador.html" %}
+{% block contenido_admin %}
+<body>
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+    <div class="menu-tablas" style="display: flex; justify-content: space-around; padding: 20px 40px; width: 90%; margin: auto; border-bottom: 2px solid #e6e6e6;">
+        <span>Solicitudes pendientes</span>
+        <span>Solicitudes asignadas</span>
+        <span>Solicitudes vencidas</span>
+        <span>Historial de visitas</span>
+        <button class="btn-verde">Crear solicitud</button>
+    </div>
+    <div class="cont-tabla tabla-solicitud">
+        <h4>SOLICITUDES PENDIENTES</h4>
+        <div style="float: right;">
+            <span>Seleccionar un recolector</span>
+            <select name="" id="reco-select">
+                <option value="null" selected>Sin asignar</option>
+                {% for recolector in recolectores %}
+                    <option value="{{ recolector.id }}">{{ recolector.nombre }}</option>
+                {% endfor %} 
+            </select>
+        </div>
+        <table class="mostrar-publicaciones">
+            <thead>
+                <tr>
+                    <th scoope="col">ID de solicitud</th>
+                    <th scoope="col">Proveedor</th>
+                    <th scoope="col">Fecha</th>
+                    <th scoope="col">Cantidad</th>
+                    <th scoope="col"><input type="checkbox" name="" id="selectAllCheck"></th>
+                    <th scoope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider tabla-mostrar" id="proveedor-tabla">
+                {% for solicitud in solicitudes %}
+                    {% if solicitud.estado == 'pendiente' %}
+                        <tr>
+                            <td>{{ solicitud.id }}</td>
+                            <td>{{ solicitud.proveedor }}</td>
+                            <td>{{ solicitud.fecha }}</td>
+                            <td>{{ solicitud.cantidad }}</td>
+                            <td><input type="checkbox" name=""></td>
+                            <td><button class="ed-del eliminar" style="color: red;"><i class="bi bi-x-lg"></i></button></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <div><button class="btn-agregar" id="asignar-rec">Asignar</button></div>
+    </div>
+    <div class="cont-tabla tabla-solicitud">
+        <h4>SOLICITUDES ASIGNADAS</h4>
+        <table class="mostrar-publicaciones">
+            <thead>
+                <tr>
+                    <th scoope="col">ID de solicitud</th>
+                    <th scoope="col">Proveedor</th>
+                    <th scoope="col">Fecha</th>
+                    <th scoope="col">Cantidad</th>
+                    <th scoope="col">Asignado</th>
+                    <th scoope="col"></th>
+                    <th scoope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider tabla-mostrar" id="proveedor-tabla">
+                {% for solicitud_a in solicitudes_a %}
+                        <tr>
+                            <td>{{ solicitud_a.id }}</td>
+                            <td>{{ solicitud_a.id_proveedor }}</td>
+                            <td>{{ solicitud_a.fecha }}</td>
+                            <td>{{ solicitud_a.cantidad }}</td>
+                            <td>{{ solicitud_a.asignado }}</td>
+                            <td><button class="ed-del eliminar" style="color: gray;" title="Asignar a otro"><i class="bi bi-person-plus-fill" style="color: gray"></i></button></td>
+                            <td><button class="ed-del eliminar" style="color: red;" title="Cerrar solicitud"><i class="bi bi-x-lg"></i></button></td>
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="cont-tabla tabla-solicitud">
+        <h4>SOLICITUDES VENCIDAS</h4>
+        <table class="mostrar-publicaciones">
+            <thead>
+                <tr>
+                    <th scoope="col">ID de solicitud</th>
+                    <th scoope="col">Proveedor</th>
+                    <th scoope="col">Fecha</th>
+                    <th scoope="col">Cantidad</th>
+                    <th scoope="col">Asignado</th>
+                    <th scoope="col">Vencimiento</th>
+                    <th scoope="col"></th>
+                    <th scoope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider tabla-mostrar" id="proveedor-tabla">
+                <!-- {% for solicitud_a in solicitudes_a %}
+                        <tr>
+                            <td>{{ solicitud_a.id }}</td>
+                            <td>{{ solicitud_a.id_proveedor }}</td>
+                            <td>{{ solicitud_a.fecha }}</td>
+                            <td>{{ solicitud_a.cantidad }}</td>
+                            <td>{{ solicitud_a.asignado }}</td>
+                            <td><button>Asignar a otro</button></td>
+                            <td><button>Cerrar solicitud</button></td>
+                        </tr>
+                {% endfor %} -->
+            </tbody>
+        </table>
+    </div>
+    <div class="cont-tabla tabla-solicitud">
+        <h4>HISTORIAL DE VISITAS</h4>
+        <table class="mostrar-publicaciones">
+            <thead>
+                <tr>
+                    <th scoope="col">ID visita</th>
+                    <th scoope="col">ID solicitud</th>
+                    <th scoope="col">Proveedor</th>
+                    <th scoope="col">Recolector</th>
+                    <th scoope="col">Fecha</th>
+                    <th scoope="col">Cantidad</th>
+                    <th scoope="col">Valor</th>
+                    <th scoope="col">Puntos</th>
+                    <th scoope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider tabla-mostrar" id="proveedor-tabla">
+                {% for visita in visitas %}
+                    <tr>
+                        <td>{{ visita.id }}</td>
+                        <td>{{ visita.solicitud }}</td>
+                        <td>{{ visita.proveedor }}</td>
+                        <td>{{ visita.recolector }}</td>
+                        <td>{{ visita.fecha }}</td>
+                        <td>{{ visita.cantidad }}</td>
+                        <td>${{ visita.valor }}</td>
+                        <td>{{ visita.puntos }}</td>
+                        <td><button class="ed-del eliminar" style="color:  #FF0000" title="Generar certificado"><i class="bi bi-file-earmark-pdf-fill"></i></button></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <dialog id="modal" class="modal">
+        <form action="">
+            <label for="id" class="label">ID de noticia</label>
+            <input type="number" name="" id="id-active" disabled class="input-disabled">
+            <label for="titulo-ed" class="label">Título:</label>
+            <input type="text" id="titulo-ed" name="titulo" required class="input-required">
+            <br>
+            <label for="descripcion-ed" class="label">Descripción:</label>
+            <textarea id="descripcion-ed" name="descripcion" required class="input-required"></textarea>
+            <br>
+            <label for="" class="label">Nueva Imagen (opcional)</label>
+            <input type="file" name="" id="img-ed" class="input-file">
+            <button id="enviar-ed" class="guardar-cambios-btn">Guardar Cambios</button>
+            <button id="cancelar-ed" class="cancelar-btn">Cancelar</button>
+        </form>
+    </dialog>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="{{ url_for('static',filename='javascript/tablasDinamicas.js') }}"></script>
+    <script src="{{ url_for('static',filename='javascript/scriptAsignarRecolector.js') }}"></script>
+</body>
+{% endblock %}
+</html>

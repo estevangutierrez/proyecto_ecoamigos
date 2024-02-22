@@ -85,6 +85,19 @@
         <div class="footer-bottom">
             <p>&copy; 2023 MVD Ecofriendly S.A.S. Todos los derechos reservados.</p>
         </div>
-    </footer>   
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Obtener elementos del DOM
+            var menuIcon = document.getElementById('menu-icon');
+            var navBar = document.getElementById('nav-bar');
+    
+            // Agregar evento de clic al icono del menú
+            menuIcon.addEventListener('click', function () {
+                // Alternar la clase 'show' en la lista nav-bar al hacer clic
+                navBar.classList.toggle('active');
+            });
+        });
+    </script>
 </body>
 </html>

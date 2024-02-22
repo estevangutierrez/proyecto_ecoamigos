@@ -1,20 +1,22 @@
-from . import db, func
+from . import db
 from sqlalchemy import Text, LargeBinary, ForeignKey
 
 class Noticia(db.Model):
     __tablename__ = 'noticias'
     id_noticia      = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    id_admin        = db.Column(db.Integer, ForeignKey('administradores.id_admin'), nullable=False)
+    id_admin        = db.Column(db.Integer, nullable=False)
     titulo          = db.Column(db.String(250), nullable=False)
     descripcion     = db.Column(Text, nullable=False)
-    fecha           = db.Column(db.DateTime(timezone=True), default=func.now())
-    recurso         = db.Column(LargeBinary, nullable=False)
+    fecha           = db.Column(db.DateTime(timezone=True))
+    recurso         = db.Column(LargeBinary)
 
-    @classmethod
-    def agregar_noticia(cls, noticia_data):
-        nueva_noticia = cls(**noticia_data)
-        db.session.add(nueva_noticia)
-        db.session.commit()
+    def editar_publicacion(self, titulo=None, descripcion=None, imagen=None):
+        if titulo:
+            self.titulo = titulo
+        if descripcion:
+            self.descripcion = descripcion
+        if imagen:
+            self.recurso = imagen
 
 class Resena(db.Model):
     __tablename__ = 'resenas'

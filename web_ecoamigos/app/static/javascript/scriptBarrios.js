@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const opcion = document.createElement('option');
                 opcion.value = barrio.id;
                 opcion.text = barrio.nombre;
-                barrioSelect.appendChild(opcion)
+                barrioSelect.appendChild(opcion) 
             });
         })
         .catch(error => console.error('Error al cargar barrios:', error));

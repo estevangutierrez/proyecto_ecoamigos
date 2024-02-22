@@ -3,6 +3,7 @@ from app.models.usuarios import Usuario
 from app.models.models_roles import Administrador, Recolector, Proveedor
 from app.models.models_barrios import Comuna, Barrio
 from app.models.models_publico import Noticia
+from app.models.models_registros import Solicitud, Visita
 from flask_login import login_required
 from app import roles_required
 from app.models import db
@@ -20,7 +21,7 @@ def crear_usuario(id, nombre, rol, contrasena):
 @login_required
 @roles_required('ADMINISTRADOR')
 def publicaciones():
-    noticias = Noticia.query.all()
+    noticias = reversed(Noticia.query.all())
     return render_template('publicaciones.html', noticias=noticias)
 
 @admin.route('/admin_home')
@@ -28,6 +29,83 @@ def publicaciones():
 @roles_required('ADMINISTRADOR')
 def admin_home():
     return render_template('administrador.html')
+
+@admin.route('/administrador/solicitudes')
+@login_required
+@roles_required('ADMINISTRADOR')
+def solicitudes():
+    datos = (
+        db.session.query(Solicitud, Proveedor)
+        .join(Proveedor, Solicitud.id_proveedor == Proveedor.id_proveedor)
+        )
+    
+    solicitudes_asignadas = (
+        db.session.query(Solicitud, Recolector)
+        .join(Recolector, Solicitud.estado == Recolector.id_recolector)
+        )
+
+    historial_visitas = (
+        db.session.query(Visita, Recolector, Proveedor)
+        .join(Recolector, Visita.id_recolector == Recolector.id_recolector)
+        .join(Proveedor, Visita.id_proveedor == Proveedor.id_proveedor)
+        .all()
+        )
+    
+    recolectores_data = Recolector.query.filter_by(estado=True)
+
+    solicitudes = []
+    recolectores = []
+    solicitudes_a = []
+    visitas = []
+
+
+    for solicitud, proveedor in datos:
+        solicitudes_dict = {
+            'id': solicitud.id_solicitud,
+            'id_proveedor':solicitud.id_proveedor,
+            'proveedor':proveedor.nombre,
+            'fecha':solicitud.fecha_solicitud,
+            'cantidad':solicitud.cantidad_aprox,
+            'estado':solicitud.estado
+        }
+
+        solicitudes.append(solicitudes_dict)
+
+    for recolector in recolectores_data:
+        recolectores_dict = {
+            'id':recolector,
+            'nombre':recolector.nombre
+        }
+
+        recolectores.append(recolectores_dict)
+
+    for solicitud_a, recolector in solicitudes_asignadas:
+        asignadas_dict = {
+            'id': solicitud_a.id_solicitud,
+            'id_proveedor':solicitud_a.id_proveedor,
+            'fecha':solicitud_a.fecha_solicitud,
+            'cantidad':solicitud_a.cantidad_aprox,
+            'asignado': recolector.nombre
+        }
+
+        solicitudes_a.append(asignadas_dict)
+
+    for visita, recolector, proveedor in historial_visitas:
+        visitas_dict = {
+            'id': visita.id_visita,
+            'solicitud': visita.id_solicitud,
+            'proveedor': proveedor.nombre,
+            'recolector': recolector.nombre,
+            'fecha': visita.fecha_recoleccion,
+            'cantidad': visita.cant_recolectada,
+            'valor': visita.costo,
+            'puntos': visita.puntos
+        }
+
+        visitas.append(visitas_dict)
+
+
+    return render_template("solicitudes.html", solicitudes=solicitudes, recolectores=recolectores,solicitudes_a=solicitudes_a, visitas=visitas)
 
 
 #LEER
@@ -144,7 +222,7 @@ def nuevo_recolector():
 
     return jsonify({'success': True})
 
-@admin.route('/recolector/<int:id_recolector>')
+@admin.route('/recolector/<int:id_recolector>', methods=['PUT'])
 @login_required
 @roles_required('ADMINISTRADOR')
 def actualizar_recolector(id_recolector):
@@ -204,7 +282,7 @@ def nuevo_proveedor():
 
     return jsonify({'success': True})
 
-@admin.route('/proveedor/<int:id_proveedor>')
+@admin.route('/proveedor/<int:id_proveedor>', methods=['PUT'])
 @login_required
 @roles_required('ADMINISTRADOR')
 def actualizar_proveedor(id_proveedor):
@@ -224,3 +302,29 @@ def actualizar_proveedor(id_proveedor):
         return jsonify({'error': 'Error al actualizar el proveedor'}), 500
     finally:
         db.session.close()
+
+@admin.route('/administrador/solicitudes/asignar', methods=['PUT'])
+@login_required
+@roles_required('ADMINISTRADOR')
+def asignar_solicitudes():
+    asignaciones = request.get_json()
+
+    recolector = asignaciones.get('recolector').get('id_recolector')
+    solicitudes = asignaciones.get('solicitudes').get('solicitudes')
+
+    try:
+        for solicitud in solicitudes:
+            id = solicitud.get('id_solicitud')
+
+            solicitud_a = Solicitud.query.get(id)
+            solicitud_a.estado = recolector
+
+        db.session.commit()
+        return jsonify({'mensaje':'Solicitudes asignadas exitosamente','icono':'success'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'mensaje':'Error al asignar la solicitudes. Intente nuevamente','icono':'error'})
+    finally:
+        db.session.close()
+
+  

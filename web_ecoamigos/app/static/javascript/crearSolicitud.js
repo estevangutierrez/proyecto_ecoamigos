@@ -27,15 +27,14 @@ actionButton.addEventListener('click', (e) => {
     })
     .then(response => response.json())
     .then(data => {
-
-        dialog.close()
-
         if(data.ok){
-            console.log(data.ok)
+            dialog.close()
             Swal.fire('Genial','Solicitud enviada exitosamente','success')
         } else if(data.existe){
+            dialog.close()
             Swal.fire('Ups','No puedes enviar esta solicitud porque ya tienes una solicitud en proceso','warning')
         } else if(data.error){
+            dialog.close()
             Swal.fire('Ups','Ha ocurrido un error','error')
         }
 

@@ -13,7 +13,16 @@
         <div class="cont-blog">
             <section class="noticias">
                 <h3>Artículos y Noticias</h3>
-                <div id="noticias-container"></div>
+                <div id="noticias-container" class="noticias-container">
+                    
+                </div>
+                <div class="pagination">
+                    <!-- <button id="prevPage">Anterior</button> -->
+                    <i class="bi bi-arrow-left-circle-fill" id="prevPage"></i>
+                    <span id="currentPage">1</span>
+                    <i class="bi bi-arrow-right-circle-fill" id="nextPage"></i>
+                    <!-- <button id="nextPage">Siguiente</button> -->
+                </div>
             </section>
             <aside class="miniaturas">
                 <h3>Artículos destacados</h3>
@@ -31,6 +40,8 @@
         </div>
     </main>
     <script src="{{ url_for('static',filename='javascript/contDinamico.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/paginacionBlog.js') }}"></script>
+
 </body>
 </html>
 {% endblock %}

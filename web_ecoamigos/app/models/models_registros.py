@@ -1,4 +1,5 @@
 from . import db, func
+import random
 from sqlalchemy import ForeignKey
 
 class Solicitud(db.Model):
@@ -9,18 +10,36 @@ class Solicitud(db.Model):
     cantidad_aprox  = db.Column(db.Integer, nullable=False)
     estado          = db.Column(db.String(20), nullable=False, default='pendiente')
     detalle         = db.Column(db.String(250))
+    token           = db.Column(db.Integer, nullable=False, default=0)
 
     def aceptar_solicitud(self, id_recolector):
         self.estado = id_recolector
+
+    def crear_token(self):
+        while True:
+            nuevo_token = random.randint(100000, 999999)
+
+            existente = Solicitud.query.filter_by(token=nuevo_token).first()
+            if not existente:
+                break
+
+        self.token = nuevo_token    
+        
+    
+    def liberar_token(self):
+        self.token  = 1
+        
 
 class Visita(db.Model):
     __tablename__ = 'visitas'
     id_visita           = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id_solicitud        = db.Column(db.Integer, ForeignKey('solicitudes.id_solicitud'), nullable=False)
     id_recolector       = db.Column(db.Integer, ForeignKey('recolectores.id_recolector'), nullable=False)
-    fecha_recoleccion   = db.Column(db.DateTime(timezone=True), default=func.now())
+    id_proveedor        = db.Column(db.Integer, ForeignKey('solicitudes.id_proveedor'), nullable=False)
+    fecha_recoleccion   = db.Column(db.DateTime(timezone=True))
     cant_recolectada    = db.Column(db.Integer, nullable=False)
     costo               = db.Column(db.Integer, nullable=False)
+    puntos              = db.Column(db.Integer, nullable=False)
     
 class Certificado(db.Model):
     __tablename__ = 'certificados'

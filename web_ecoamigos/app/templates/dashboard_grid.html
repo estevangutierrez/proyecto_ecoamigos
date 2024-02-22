@@ -36,7 +36,7 @@
                 </p>
             {% else %}
                 <p class="texto-recoleccion">Usted no tiene solicitudes pendientes.</p>
-            {%endif%}
+            {% endif %}
             <button id="solicitador-recolecta" type="button">Solicitar recoleccion</button>
         </div>
         <div class="contenedor-historialrecolecciones">
@@ -47,10 +47,20 @@
                         <th>ID</th>
                         <th>Fecha</th>
                         <th>Cantidad aceite</th>
-                        <th>Puntos recibidos</th>
+                        <th>Valor</th>
+                        <th>Puntos</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="historial-recolecciones">
+                    {% for visita in visitas %}
+                        <td>{{ visita.id }}</td>
+                        <td>{{ visita.fecha }}</td>
+                        <td>{{ visita.cantidad }}</td>
+                        <td>{{ visita.valor }}</td>
+                        <td>{{ visita.puntos }}</td>
+                        <td><button class="ed-del eliminar" style="color:  #FF0000" title="Generar certificado"><i class="bi bi-file-earmark-pdf-fill"></i></button></td>
+                    {% endfor%}
                 </tbody>
             </table>
         </div>

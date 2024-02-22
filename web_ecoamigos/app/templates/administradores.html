@@ -41,6 +41,7 @@
                             ACTIVO
                         {% endif %}
                     </td>
+                    <td><button class="ed-del"><i class="bi bi-pencil-square"></i></button><button class="ed-del"><i class="bi bi-trash-fill"></i></button></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -86,6 +87,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ url_for('static', filename='javascript/ventanasEmergentes.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/scriptAdmin.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/paginacion.js') }}"></script>
+
 </body>
 {% endblock %}
 </html>

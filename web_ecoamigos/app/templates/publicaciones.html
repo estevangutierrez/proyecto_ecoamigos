@@ -6,7 +6,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-registro-recolectores.css') }}">
     <title>Publicaciones</title>
+    <style>
+.modal {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.label {
+    margin-top: 10px;
+    display: block;
+}
+
+.input-disabled {
+cursor: not-allowed;
+}
+
+.input-required,
+.input-file {
+    margin-top: 5px;
+}
+
+.input-required {
+    width: 100%;
+}
+
+.input-file {
+    width: calc(100% - 20px); /* Para ajustar el ancho y considerar el padding del modal */
+}
+
+.guardar-cambios-btn {
+    background-color: #127848;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cancelar-btn {
+    background-color: #ccc;
+    color: #333;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.guardar-cambios-btn:hover,
+.cancelar-btn:hover {
+    filter: brightness(0.9);
+}
+
+    </style>
 </head>
 <body>
         <div class="filtro">
@@ -23,7 +80,24 @@
             <div>
                 <button  class="btn-agregar nuevo-usuario">Nueva Publicacion</button>
             </div>
-        </div>   
+        </div>
+        <div id="loadingOverlay">
+            <div class="spinner"></div>
+        </div>
+        <div id="fondo-oscuro" class="fondo-oscuro"></div>
+        <div class="formulario-emergente contenedor-formulario modal" id="formulario-emergente">
+            <div style="margin-bottom: 8%;"><i class="bi bi-x-circle" id="btn-cerrar" style="float: right; font-size: 25px; color:#127848"></i></div>
+            <form method="post" id="form-n-publicacion" enctype="multipart/form-data" class="form-registro">
+                <label for="titulo" class="label">Titulo:</label>
+                <input type="text" name="titulo" id="titulo-publicacion" class="input-required">
+                <label for="contenido" class="label">Contenido:</label>
+                <textarea name="contenido" id="contenido-publicacion" cols="30" rows="5" class="input-required"></textarea>
+                <label for="imagen" class="label">Imagen:</label>
+                <div class="custom-file-input"></div>
+                <input type="file" name="imagen" id="img-publicacion" accept="image/*" class="input-file">
+                <button class="btn-agregar" id="btn-publicar">PUBLICAR</button>
+            </form>
+        </div> 
         <div class="cont-tabla">
             <table class="mostrar-publicaciones" >
                 <thead>
@@ -35,46 +109,45 @@
                         <th scoope="col"></th>
                     </tr>
                 </thead>
-                <tbody class="table-group-divider tabla_mostrar" id="publicaciones-cont"> 
+                <tbody class="table-group-divider tabla-mostrar" id="publicaciones-cont"> 
                     {% for noticia in noticias %}
-                    <tr>
+                    <tr id="{{ noticia.id_noticia }}">
                         <td>{{ noticia.id_noticia }}</td>
                         <td>{{ noticia.titulo }}</td>
+                        <td style="display: none;">{{ noticia.descripcion }}</td>
                         <td>{{ noticia.fecha }}</td>
                         <td>{{ noticia.id_admin }}</td>
+                        <td><button class="ed-del editar" title="Editar"><i class="bi bi-pencil-square"></i></button><button class="ed-del eliminar" title="Eliminar"><i class="bi bi-trash-fill"></i></button></td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
             <div class="pagination">
-                <!-- <button id="prevPage">Anterior</button> -->
                 <i class="bi bi-arrow-left-circle-fill" id="prevPage"></i>
                 <span id="currentPage">1</span>
                 <i class="bi bi-arrow-right-circle-fill" id="nextPage"></i>
-                <!-- <button id="nextPage">Siguiente</button> -->
             </div>
         </div>
-        <div id="loadingOverlay">
-            <div class="spinner"></div>
-        </div>
-        <div id="fondo-oscuro" class="fondo-oscuro"></div>
-        <div class="formulario-emergente cont-edit-publicacion" id="formulario-emergente">
-            <div style="margin-bottom: 8%;"><i class="bi bi-x-circle" id="btn-cerrar" style="float: right; font-size: 25px; color:#127848"></i></div>
-            <form id="form-n-publicacion" enctype="multipart/form-data">
-                <label for="titulo">Titulo:</label>
-                <input type="text" name="titulo" id="titulo-publicacion">
-                <label for="contenido">Contenido:</label>
-                <textarea name="contenido" id="contenido-publicacion" cols="30" rows="10"></textarea>
-                <label for="imagen">Imagen:</label>
-                <div class="custom-file-input"></div>
-                <input type="file" name="imagen" id="img-publicacion">
-                <button class="btn-agregar" id="btn-publicar">PUBLICAR</button>
+        <dialog id="modal" class="modal">
+            <form action="">
+                <label for="id" class="label">ID de noticia</label>
+                <input type="number" name="" id="id-active" disabled class="input-disabled">
+                <label for="titulo-ed" class="label">Título:</label>
+                <input type="text" id="titulo-ed" name="titulo" required class="input-required">
+                <br>
+                <label for="descripcion-ed" class="label">Descripción:</label>
+                <textarea id="descripcion-ed" name="descripcion" required class="input-required"></textarea>
+                <br>
+                <label for="" class="label">Nueva Imagen (opcional)</label>
+                <input type="file" name="" id="img-ed" class="input-file">
+                <button id="enviar-ed" class="guardar-cambios-btn">Guardar Cambios</button>
+                <button id="cancelar-ed" class="cancelar-btn">Cancelar</button>
             </form>
-        </div>
+        </dialog>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <script src="{{ url_for('static', filename='javascript/ventanasEmergentes.js') }}"></script>
         <script src="{{ url_for('static', filename='javascript/scriptPublicaciones.js') }}"></script>
-
+        <script src="{{ url_for('static', filename='javascript/paginacion.js') }}"></script>
 </body>
 </html>
 {% endblock %}

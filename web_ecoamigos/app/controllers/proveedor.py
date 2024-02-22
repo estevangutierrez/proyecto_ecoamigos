@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, request, jsonify
 from app.models.models_roles import Proveedor
-from app.models.models_registros import Solicitud
+from app.models.models_registros import Solicitud, Visita
 from flask_login import login_required, current_user
 from app.models import db
 from datetime import datetime
@@ -13,14 +13,27 @@ proveedor = Blueprint('proveedor', __name__)
 @roles_required('PROVEEDOR')
 def proveedor_home():
     proveedor = Proveedor.query.get(current_user.id)
-    solicitud_p = db.session.query(Solicitud).filter(Solicitud.id_proveedor==proveedor.id_proveedor,Solicitud.estado!='finalizado').first()
+    solicitud_p = db.session.query(Solicitud).filter(Solicitud.id_proveedor==proveedor.id_proveedor,Solicitud.estado!='finalizada').first()
     return render_template('dashboard_grid.html', proveedor=proveedor,solicitud_p=solicitud_p)
 
 @proveedor.route('/proveedor/solicitudes')
 @login_required
 @roles_required('PROVEEDOR')
 def cargar_solicitudes():
-    return render_template('proveedor.html')
+    id = current_user.id
+    consulta = Visita.query.filter(id_proveedor=id).all()
+    visitas = []
+    for visita in consulta:
+        datos = {
+            'id': visita.id_visita,
+            'fecha': visita.fecha_recoleccion,
+            'cantidad': visita.cant_recolectada,
+            'valor': visita.costo,
+            'puntos': visita.puntos
+        }
+        visitas.append(datos)
+
+    return render_template('proveedor.html', visitas=visitas)
 
 @proveedor.route('/proveedor/enviar_solicitud', methods=['POST'])
 @login_required
@@ -29,8 +42,7 @@ def enviar_solicitud():
     datos = request.get_json()
     id = current_user.id
     proveedor = Proveedor.query.filter_by(id_proveedor=id).first()
-    solicitud_pendiente = db.session.query(Solicitud).filter(Solicitud.id_proveedor==id,Solicitud.estado!='finalizado').first()
-    print(solicitud_pendiente)
+    solicitud_pendiente = db.session.query(Solicitud).filter(Solicitud.id_proveedor==id,Solicitud.estado!='finalizada').first()
 
     if solicitud_pendiente:
         return jsonify({'existe':'Solicitud existente'})

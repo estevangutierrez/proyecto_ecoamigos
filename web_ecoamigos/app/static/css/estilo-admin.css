@@ -26,9 +26,10 @@
   }
 
 html, body {
-    min-height: 100vh;
+    height: 100%;
     background-color: #eee;
     margin: 0;
+    padding: 0;
 }
   
 .header {
@@ -181,12 +182,25 @@ a {
     border : none;
     transition: all 0.3s;
     float: right;
-    margin-top: 5%;
+    margin-top: 2%;
+    cursor: pointer;
 }
 
-.btn-agregar:hover {
-    box-shadow: 0px 6px 6px #7c7c7c;
-    transform: translateY(-4px);
+.btn-verde {
+    padding: 1em;
+    background-color: #127848;
+    border-radius: 6px;
+    color: #eee;
+    border : none;
+    transition: all 0.3s;
+    float: right;
+    cursor: pointer;
+}
+
+
+.btn-agregar:hover, .btn-verde:hover {
+    box-shadow: 0px 4px 4px #7c7c7c;
+    transform: translateY(-1px);
 }
 
 .cont-tabla {
@@ -196,12 +210,12 @@ a {
 
 .mostrar-publicaciones, .mostrar-solicitudes {
     width: 90%;
-    margin: 5%;
+    margin: 2% 5%;
     row-gap: 1em;
 }
 
 .mostrar-publicaciones td, .mostrar-solicitudes td {
-    padding: 10px;
+    padding: 2px 5px;
     border-bottom: 1px solid #333;
 }
 
@@ -422,3 +436,110 @@ input[type=number]::-webkit-outer-spin-button {
     flex-direction: column;
     margin: 1% auto;
 }
+
+.menu-tablas span{
+    cursor: pointer;
+    transition: 2s;
+    padding: 3px;
+}
+
+.menu-tablas span:hover {
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.tabla-solicitud {
+    display: none;
+}
+
+/* Estilos generales */
+
+@media only screen and (max-width: 767px) {
+    /* Estilos para pantallas pequeñas (móviles) */
+  
+    #admin-p {
+      grid-template-columns: 1fr; /* Cambia a una sola columna en dispositivos móviles */
+      grid-template-areas:
+        "header"
+        "menu"
+        "contenido";
+    }
+  
+    .menu {
+      min-height: auto; /* Ajusta la altura del menú según sea necesario */
+    }
+  
+    .header {
+      flex-direction: column; /* Cambia la dirección del flex para el header en móviles */
+      text-align: center;
+    }
+  
+    .header i:hover {
+      background-color: transparent; /* Quita el fondo al hacer hover en móviles */
+    }
+  
+    .nav-bar {
+      margin-top: 0; /* Ajusta el margen superior del menú de navegación */
+    }
+
+    /* #nav-bar {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        z-index: 1;
+    }
+
+    #nav-bar.active {
+        display: flex;
+    }
+
+    .menu-icon {
+        display: block;
+        cursor: pointer;
+    }
+   */
+    .cont-publicaciones {
+      grid-template-areas:
+          "filtro"
+          "tabla";
+    }
+  
+    .mostrar-publicaciones,
+    .mostrar-solicitudes {
+      width: 100%; /* Ajusta el ancho de las tablas en dispositivos móviles */
+      margin: 2% 0;
+    }
+  
+    .cont-tabla {
+      width: 100%; /* Ajusta el ancho de la tabla en dispositivos móviles */
+      margin: 1% 0;
+    }
+  
+    .estadisticas {
+      flex-direction: column; /* Cambia la dirección del flex para estadísticas en móviles */
+      gap: 1em;
+      text-align: center;
+    }
+  
+    .asignar {
+      float: none; /* Elimina el float en dispositivos móviles */
+      margin: 2% 0;
+    }
+  
+    .cont-login {
+      width: 100%; /* Ajusta el ancho del contenedor de login en dispositivos móviles */
+    }
+  
+    .label-login {
+      align-items: flex-start; /* Ajusta la alineación en móviles */
+    }
+  
+    .pagination {
+      font-size: 16px; /* Ajusta el tamaño de la paginación en dispositivos móviles */
+    }
+  
+    .formulario-emergente,
+    .fondo-oscuro {
+      display: none; /* Oculta el formulario emergente y el fondo oscuro en móviles */
+    }
+  }
+  
