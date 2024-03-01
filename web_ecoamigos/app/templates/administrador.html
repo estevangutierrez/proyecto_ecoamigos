@@ -37,7 +37,7 @@
     <div>
         <a href="{{ url_for('auth.logout') }}"><i class="bi bi-box-arrow-in-left"></i></a>
     </div>
-</header>
+  </header>
   <aside class="menu">
     <div>
         <img src="{{ url_for('static', filename='imagenes/minilogo.png') }}" alt="esta es una imagen" id="imagennn">
@@ -47,7 +47,7 @@
             {% if current_user.rol == 'ADMINISTRADOR' %}
             <li id="opc-pub"><a href="{{ url_for('admin.publicaciones') }}">Publicaciones</a></li>
             <li id="opc-sol"><a href="{{ url_for('admin.solicitudes') }}">Solicitudes</a></li>
-            <li id=""><a href="">Certificados</a></li>
+            <li id=""><a href="">Canjeos</a></li>
             <li class="dropdown">
                 Usuarios
                 <div class="dropdown-content">
@@ -66,19 +66,11 @@
             <li id=""><a href="">Perfil</a></li>
             <li id=""><a href="">Canjeos</a></li>
             <li id=""><a href="">Recolecciones</a></li>
-            <li id="tokens-btn"><a href="">Tokens</a></li>
-            <li id=""><a href="">Certificados</a></li>
             {% endif %}
         </ul>
     </nav>
   </aside>
   <main class="contenido">
-    {% if current_user.rol == "PROVEEDOR"%}
-      <dialog id="contenedor-token">
-        <i class="bi bi-x-circle" id="cerrar-token" style="float: right; font-size: 25px; color:#127848"></i>
-        <p style="text-align: center;" id="info-token">HOLAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
-      </dialog>
-    {% endif %}
     <div id="contenedor">
       {% block contenido_admin %}{% endblock %}
     </div>

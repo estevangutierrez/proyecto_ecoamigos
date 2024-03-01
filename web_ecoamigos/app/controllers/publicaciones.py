@@ -78,7 +78,7 @@ def eliminar_publicacion(id):
         db.session.delete(noticia)
         db.session.commit()
         db.session.close()
-        return jsonify({'mensaje':'Noticia eliminada','icono':'success'})
+        return jsonify({'mensaje':'Publicacion eliminada exitosamente','icono':'success'})
     else:
         return jsonify({'mensaje':'Error al eliminar la noticia','icono':'error'})
     

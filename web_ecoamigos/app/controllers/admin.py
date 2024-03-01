@@ -4,6 +4,8 @@ from app.models.models_roles import Administrador, Recolector, Proveedor
 from app.models.models_barrios import Comuna, Barrio
 from app.models.models_publico import Noticia
 from app.models.models_registros import Solicitud, Visita
+from app.utils.generar_contrasena import generar_contrasena
+from app.utils.enviar_correo import enviar_correo
 from flask_login import login_required
 from app import roles_required
 from app.models import db
@@ -39,10 +41,14 @@ def solicitudes():
         .join(Proveedor, Solicitud.id_proveedor == Proveedor.id_proveedor)
         )
     
+    proveedores = Proveedor.query.filter_by(estado=True).all()
+    
     solicitudes_asignadas = (
         db.session.query(Solicitud, Recolector)
         .join(Recolector, Solicitud.estado == Recolector.id_recolector)
         )
+    
+    solicitudes_vencidas = Solicitud.query.filter_by(estado='vencida').all()
 
     historial_visitas = (
         db.session.query(Visita, Recolector, Proveedor)
@@ -56,6 +62,7 @@ def solicitudes():
     solicitudes = []
     recolectores = []
     solicitudes_a = []
+    solicitudes_v = []
     visitas = []
 
 
@@ -85,7 +92,8 @@ def solicitudes():
             'id_proveedor':solicitud_a.id_proveedor,
             'fecha':solicitud_a.fecha_solicitud,
             'cantidad':solicitud_a.cantidad_aprox,
-            'asignado': recolector.nombre
+            'asignado': recolector.nombre,
+            'token': solicitud_a.token
         }
 
         solicitudes_a.append(asignadas_dict)
@@ -103,9 +111,19 @@ def solicitudes():
         }
 
         visitas.append(visitas_dict)
+    
+    for solicitud_v in solicitudes_vencidas:
+        vencidas_dict = {
+            'id':solicitud_v.id_solicitud,
+            'proveedor':solicitud_v.id_proveedor,
+            'fecha_solicitud':solicitud_v.fecha_solicitud,
+            'cantidad':solicitud_v.cantidad_aprox
+        }
+
+        solicitudes_v.append(vencidas_dict)
 
 
-    return render_template("solicitudes.html", solicitudes=solicitudes, recolectores=recolectores,solicitudes_a=solicitudes_a, visitas=visitas)
+    return render_template("solicitudes.html", solicitudes=solicitudes, recolectores=recolectores,solicitudes_a=solicitudes_a, visitas=visitas, solicitudes_v=solicitudes_v, proveedores=proveedores)
 
 
 #LEER
@@ -142,7 +160,7 @@ def nuevo_administrador():
     nombre = data.get('nombre')
     correo = data.get('correo')
     telefono = data.get('telefono')
-    contrasena = 'admin123'
+    contrasena = generar_contrasena(id)
     rol = 'ADMINISTRADOR'
 
     user = Usuario.query.filter_by(id=id).first()
@@ -153,9 +171,13 @@ def nuevo_administrador():
     nuevo_usuario = crear_usuario(id,nombre,rol,contrasena)
     nuevo_admin = Administrador(id_admin=int(id),nombre=nombre,correo=correo,celular=telefono)
 
+
     db.session.add(nuevo_usuario)
     db.session.add(nuevo_admin)
     db.session.commit()
+    db.session.close()
+
+    enviar_correo(correo,f'Usuario: {id}\nContraseña: {contrasena}')
 
     return jsonify({'success': True})
 
@@ -205,7 +227,7 @@ def nuevo_recolector():
     direccion = data.get('direccion')
     comuna = data.get('comuna')
     barrio = data.get('barrio')
-    contrasena = 'reco123'
+    contrasena = generar_contrasena(id)
     rol = 'RECOLECTOR'
 
     user = Usuario.query.filter_by(id=id).first()
@@ -218,9 +240,27 @@ def nuevo_recolector():
 
     db.session.add(nuevo_usuario)
     db.session.add(nuevo_recolector)
-    db.session.commit()
 
-    return jsonify({'success': True})
+    try:
+        cuerpo_correo = f'''
+        Hola {nombre}, bienvenido a la familia Ecofriendly. 
+        Aquí están tus credenciales de acceso en el rol de {rol}
+
+        Usuario: {id}
+        Contraseña: {contrasena}
+        
+        Recuerda cambiar tu contraseña luego de inciar sesión por primera vez. =D
+        '''
+        enviar_correo(correo,cuerpo_correo)
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        print('EL ERROR FUE ', e)
+        return jsonify({'success':False})
+    finally:
+        db.session.close()
+
 
 @admin.route('/recolector/<int:id_recolector>', methods=['PUT'])
 @login_required
@@ -248,7 +288,8 @@ def actualizar_recolector(id_recolector):
 @roles_required('ADMINISTRADOR')
 def proveedores():
     proveedores = Proveedor.query.all()
-    return render_template('proveedores.html',proveedores=proveedores)
+    comunas = Comuna.query.all()
+    return render_template('proveedores.html',proveedores=proveedores, comunas=comunas)
 
 
 #CREAR
@@ -264,7 +305,7 @@ def nuevo_proveedor():
     direccion = data.get('direccion')
     comuna = data.get('comuna')
     barrio = data.get('barrio')
-    contrasena = 'prov123'
+    contrasena = generar_contrasena(id)
     puntos = 0
     rol = 'PROVEEDOR'
 
@@ -278,9 +319,27 @@ def nuevo_proveedor():
 
     db.session.add(nuevo_usuario)
     db.session.add(nuevo_proveedor)
-    db.session.commit()
 
-    return jsonify({'success': True})
+    try:
+        cuerpo_correo = f'''
+        Hola {nombre}, bienvenido a la familia Ecofriendly. 
+        Aquí están tus credenciales de acceso en el rol de {rol}\n
+
+        Usuario: {id}\n
+        Contraseña: {contrasena}\n
+        
+        Recuerda cambiar tu contraseña luego de inciar sesión por primera vez. =D
+        '''
+        enviar_correo(correo,cuerpo_correo)
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        print('EL ERROR FUE ', e)
+        return jsonify({'success':False})
+    finally:
+        db.session.close()
+
 
 @admin.route('/proveedor/<int:id_proveedor>', methods=['PUT'])
 @login_required
@@ -324,6 +383,26 @@ def asignar_solicitudes():
     except Exception as e:
         db.session.rollback()
         return jsonify({'mensaje':'Error al asignar la solicitudes. Intente nuevamente','icono':'error'})
+    finally:
+        db.session.close()
+
+@admin.route('/administrador/solicitudes/rechazar', methods=['PUT'])
+@login_required
+@roles_required('ADMINISTRADOR')
+def rechazar_solicitud():
+    id_solicitud = request.get_json().get('id_solicitud')
+
+    try:
+        solicitud = Solicitud.query.get(id_solicitud)
+        solicitud.estado = 'rechazada'
+
+        db.session.commit()
+        return jsonify({'mensaje':'Solicitud rechazada exitosamente','icono':'success'})
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'mensaje':'Error al rechazar la solicitud','icono':'error'})
+    
     finally:
         db.session.close()
 

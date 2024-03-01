@@ -1,5 +1,5 @@
     document.addEventListener("DOMContentLoaded", function () {
-        const itemsPerPage = 5; // Cambia esto según la cantidad de filas que quieras mostrar por página
+        const itemsPerPage = 6; // Cambia esto según la cantidad de filas que quieras mostrar por página
         let currentPage = 1;
         const tableRows = document.querySelectorAll('.tabla-mostrar tr');
 

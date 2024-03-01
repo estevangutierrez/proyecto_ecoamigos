@@ -85,4 +85,52 @@ document.addEventListener('DOMContentLoaded', function () {
                 Swal.fire('Error al asignar', error, 'error');
             });
     }
+
+    const rechazarButtons = document.querySelectorAll('#rechazar-sol')
+    rechazarButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const filaActual = button.closest('tr');
+            const idSolicitud = filaActual.cells[0].innerText;
+
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "Las solicitudes rechazadas no se podrán recuperar",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonText: 'Salir',
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sí, rechazar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Mostrar el overlay
+                    loadingOverlay.style.display = 'block';
+
+                    formData = {
+                        id_solicitud:idSolicitud
+                    };
+
+                    rechazarSolicitud(formData);
+                }
+            });
+        })
+    }) 
+
+    function rechazarSolicitud(JSONdata) {
+        fetch('/administrador/solicitudes/rechazar', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(JSONdata)
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingOverlay.style.display = 'none';
+            Swal.fire(data.mensaje,'',data.icono);
+        })
+        .catch(error => {
+            Swal.fire('¡Error!',error,'error')
+        })
+    }
 });

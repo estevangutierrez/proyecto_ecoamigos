@@ -39,6 +39,10 @@ class Proveedor(db.Model):
     def desactivar_usuario(self):
         self.estado = False
 
+    def aumentar_puntos(self,nuevos_puntos):
+        puntos = self.puntos + nuevos_puntos
+        self.puntos = puntos
+
 class Recolector(db.Model):
     __tablename__ = 'recolectores'
     id_recolector   = db.Column(db.Integer, primary_key=True)

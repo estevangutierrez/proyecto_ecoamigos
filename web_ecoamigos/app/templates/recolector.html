@@ -5,6 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
     <title>Recolector</title>
+    <style>
+        .modal {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .label {
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .input-disabled {
+        cursor: not-allowed;
+        }
+        
+        .input-required,
+        .input-file {
+            margin-top: 5px;
+        }
+        
+        .input-required {
+            width: 100%;
+        }
+        
+        .input-file {
+            width: calc(100% - 20px); /* Para ajustar el ancho y considerar el padding del modal */
+        }
+        
+        .guardar-cambios-btn {
+            background-color: #127848;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .cancelar-btn {
+            background-color: #ccc;
+            color: #333;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .guardar-cambios-btn:hover,
+        .cancelar-btn:hover {
+            filter: brightness(0.9);
+        }
+        
+    </style>
 </head>
 {% extends "administrador.html" %}
 {% block contenido_admin %}
@@ -37,7 +93,7 @@
                             <td>{{ solicitud.direccion }}</td>
                             <td>{{ solicitud.cantidad }} Litros</td>
                             <td>{{ solicitud.detalle }}</td>
-                            <td><button class="btn-agregar">Abrir</button></td>
+                            <td><button class="btn-agregar" id="abrir-sol-btn">Abrir</button></td>
                         </tr>
                     {% endif %}
                 {% endfor %}
@@ -79,6 +135,19 @@
             </tbody>
         </table>
     </div>
+    <dialog id="dialogo-conf" class="modal">
+        <form action="">
+            ID de solicitud
+            <div id="info">
+            </div>
+            <label for="cantidad" class="label">Cantidad *Kilogramos</label>
+            <input name="cantidad" type="number" id="cantidad-aprox" class="input-required">
+            <label for="Token" class="label">Token</label>
+            <input type="number" name="token" id="token" class="input-required">
+            <button id="confirmar-v" class="guardar-cambios-btn">Confirmar</button>
+            <button id="cancelar" class="cancelar-btn">Cancelar</button>
+        </form>
+    </dialog>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ url_for('static',filename='javascript/aceptarSolicitud.js') }}"></script>
 </body>

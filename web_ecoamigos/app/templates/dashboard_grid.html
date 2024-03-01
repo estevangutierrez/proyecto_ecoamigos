@@ -25,19 +25,20 @@
         <div class="puntos">
             <p class="texto-puntos">Tus puntos</p>
             <p class="numero-puntos">{{ proveedor.puntos }}</p>
-            <button type="button">Canjear Puntos</button>
+            <button type="button" style="cursor: pointer;">Canjear Puntos</button>
         </div>
         <div class="recoleccionpendiente">
             {% if solicitud_p %}
                 <p class="texto-recoleccion">Usted tiene una solicitud pendiente<br>
                     <b>ID:</b> {{ solicitud_p.id_solicitud }}<br>
                     <b>Fecha:</b> {{ solicitud_p.fecha_solicitud }}<br>
-                    <b>Estado:</b> {% if solicitud_p.estado.isnumeric() %}aceptada{% else %}{{ solicitud_p.estado }}{% endif %}
+                    <b>Estado:</b> {% if solicitud_p.estado.isnumeric() %}aceptada{% else %}{{ solicitud_p.estado }}{% endif %}<br>
+                    <b>Token:</b> {{ solicitud_p.token }}
                 </p>
             {% else %}
                 <p class="texto-recoleccion">Usted no tiene solicitudes pendientes.</p>
             {% endif %}
-            <button id="solicitador-recolecta" type="button">Solicitar recoleccion</button>
+            <button id="solicitador-recolecta" type="button" style="cursor: pointer;">Solicitar recoleccion</button>
         </div>
         <div class="contenedor-historialrecolecciones">
             <p>Historial de recolecciones</p>
@@ -45,21 +46,23 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Fecha</th>
+                        <th>Fecha<br>(DD/MM/AAAA)</th>
                         <th>Cantidad aceite</th>
                         <th>Valor</th>
                         <th>Puntos</th>
-                        <th></th>
+                        <th>Certificado</th>
                     </tr>
                 </thead>
                 <tbody id="historial-recolecciones">
                     {% for visita in visitas %}
+                    <tr>
                         <td>{{ visita.id }}</td>
-                        <td>{{ visita.fecha }}</td>
-                        <td>{{ visita.cantidad }}</td>
-                        <td>{{ visita.valor }}</td>
+                        <td>{{ visita.fecha.strftime('%d/%m/%Y') }}</td>
+                        <td>{{ visita.cantidad }} Litros</td>
+                        <td>${{ visita.valor }}</td>
                         <td>{{ visita.puntos }}</td>
-                        <td><button class="ed-del eliminar" style="color:  #FF0000" title="Generar certificado"><i class="bi bi-file-earmark-pdf-fill"></i></button></td>
+                        <td><button class="ed-del eliminar" style="color:  #FF0000" title="Generar certificado"><i class="bi bi-file-earmark-pdf-fill"><a href="/generar_pdf/{{ visita.id }}" target="_blank" style="color: #000">Certificado</a></i></button></td>
+                    </tr>
                     {% endfor%}
                 </tbody>
             </table>

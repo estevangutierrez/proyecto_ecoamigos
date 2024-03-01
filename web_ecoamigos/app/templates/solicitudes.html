@@ -5,6 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
     <title>Solicitudes</title>
+    <style>
+        .modal {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .label {
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .input-disabled {
+        cursor: not-allowed;
+        }
+        
+        .input-required,
+        .input-file {
+            margin-top: 5px;
+        }
+        
+        .input-required {
+            width: 100%;
+        }
+        
+        .input-file {
+            width: calc(100% - 20px); /* Para ajustar el ancho y considerar el padding del modal */
+        }
+        
+        .guardar-cambios-btn {
+            background-color: #127848;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .cancelar-btn {
+            background-color: #ccc;
+            color: #333;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .guardar-cambios-btn:hover,
+        .cancelar-btn:hover {
+            filter: brightness(0.9);
+        }
+
+        #detalle {
+            height: 60px;
+        }
+        
+    </style>
 </head>
 {% extends "administrador.html" %}
 {% block contenido_admin %}
@@ -17,7 +77,7 @@
         <span>Solicitudes asignadas</span>
         <span>Solicitudes vencidas</span>
         <span>Historial de visitas</span>
-        <button class="btn-verde">Crear solicitud</button>
+        <button class="btn-verde" id="formulario-sol">Crear solicitud</button>
     </div>
     <div class="cont-tabla tabla-solicitud">
         <h4>SOLICITUDES PENDIENTES</h4>
@@ -37,7 +97,7 @@
                     <th scoope="col">Proveedor</th>
                     <th scoope="col">Fecha</th>
                     <th scoope="col">Cantidad</th>
-                    <th scoope="col"><input type="checkbox" name="" id="selectAllCheck"></th>
+                    <th scoope="col"><input type="checkbox" name="" id="selectAllCheck" title="Seleccionar todos"></th>
                     <th scoope="col"></th>
                 </tr>
             </thead>
@@ -50,7 +110,7 @@
                             <td>{{ solicitud.fecha }}</td>
                             <td>{{ solicitud.cantidad }}</td>
                             <td><input type="checkbox" name=""></td>
-                            <td><button class="ed-del eliminar" style="color: red;"><i class="bi bi-x-lg"></i></button></td>
+                            <td><button class="ed-del eliminar" style="color: red;"><i class="bi bi-x-lg" id="rechazar-sol"></i></button></td>
                         </tr>
                     {% endif %}
                 {% endfor %}
@@ -68,6 +128,7 @@
                     <th scoope="col">Fecha</th>
                     <th scoope="col">Cantidad</th>
                     <th scoope="col">Asignado</th>
+                    <th>Token</th>
                     <th scoope="col"></th>
                     <th scoope="col"></th>
                 </tr>
@@ -80,6 +141,7 @@
                             <td>{{ solicitud_a.fecha }}</td>
                             <td>{{ solicitud_a.cantidad }}</td>
                             <td>{{ solicitud_a.asignado }}</td>
+                            <td>{{ solicitud_a.token }}</td>
                             <td><button class="ed-del eliminar" style="color: gray;" title="Asignar a otro"><i class="bi bi-person-plus-fill" style="color: gray"></i></button></td>
                             <td><button class="ed-del eliminar" style="color: red;" title="Cerrar solicitud"><i class="bi bi-x-lg"></i></button></td>
                         </tr>
@@ -96,24 +158,19 @@
                     <th scoope="col">Proveedor</th>
                     <th scoope="col">Fecha</th>
                     <th scoope="col">Cantidad</th>
-                    <th scoope="col">Asignado</th>
-                    <th scoope="col">Vencimiento</th>
-                    <th scoope="col"></th>
-                    <th scoope="col"></th>
+                    <th scoope="col"><input type="checkbox" name="" id="" title="Seleccionar todos"></th>
                 </tr>
             </thead>
             <tbody class="table-group-divider tabla-mostrar" id="proveedor-tabla">
-                <!-- {% for solicitud_a in solicitudes_a %}
+                {% for solicitud_v in solicitudes_v %}
                         <tr>
-                            <td>{{ solicitud_a.id }}</td>
-                            <td>{{ solicitud_a.id_proveedor }}</td>
-                            <td>{{ solicitud_a.fecha }}</td>
-                            <td>{{ solicitud_a.cantidad }}</td>
-                            <td>{{ solicitud_a.asignado }}</td>
-                            <td><button>Asignar a otro</button></td>
-                            <td><button>Cerrar solicitud</button></td>
+                            <td>{{ solicitud_v.id }}</td>
+                            <td>{{ solicitud_v.proveedor }}</td>
+                            <td>{{ solicitud_v.fecha_solicitud }}</td>
+                            <td>{{ solicitud_v.cantidad }}</td>
+                            <td><input type="checkbox"></td>
                         </tr>
-                {% endfor %} -->
+                {% endfor %}
             </tbody>
         </table>
     </div>
@@ -123,11 +180,9 @@
             <thead>
                 <tr>
                     <th scoope="col">ID visita</th>
-                    <th scoope="col">ID solicitud</th>
                     <th scoope="col">Proveedor</th>
-                    <th scoope="col">Recolector</th>
                     <th scoope="col">Fecha</th>
-                    <th scoope="col">Cantidad</th>
+                    <th scoope="col">Cantidad Kg</th>
                     <th scoope="col">Valor</th>
                     <th scoope="col">Puntos</th>
                     <th scoope="col"></th>
@@ -137,14 +192,12 @@
                 {% for visita in visitas %}
                     <tr>
                         <td>{{ visita.id }}</td>
-                        <td>{{ visita.solicitud }}</td>
                         <td>{{ visita.proveedor }}</td>
-                        <td>{{ visita.recolector }}</td>
                         <td>{{ visita.fecha }}</td>
                         <td>{{ visita.cantidad }}</td>
                         <td>${{ visita.valor }}</td>
                         <td>{{ visita.puntos }}</td>
-                        <td><button class="ed-del eliminar" style="color:  #FF0000" title="Generar certificado"><i class="bi bi-file-earmark-pdf-fill"></i></button></td>
+                        <td><button class="ed-del eliminar" style="color:  #FF0000" title="Generar certificado"><i class="bi bi-file-earmark-pdf-fill"><a href="/generar_pdf/{{ visita.id }}" target="_blank" style="color: #000">Certificado</a></i></button></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -152,23 +205,27 @@
     </div>
     <dialog id="modal" class="modal">
         <form action="">
-            <label for="id" class="label">ID de noticia</label>
-            <input type="number" name="" id="id-active" disabled class="input-disabled">
-            <label for="titulo-ed" class="label">Título:</label>
-            <input type="text" id="titulo-ed" name="titulo" required class="input-required">
+            <label for="proveedor" class="label">Proveedor*</label>
+            <select name="proveedor" id="proveedor-id">
+                <option value="" selected></option>
+                {% for proveedor in proveedores %}
+                    <option value="{{ proveedor.id_proveedor }}">{{ proveedor.nombre }}</option>
+                {% endfor %}
+            </select>
+            <label for="cantidad" class="label">Cantidad aprox*</label>
+            <input type="number" id="cantidad-aceite" name="cantidad" required class="input-required">
             <br>
-            <label for="descripcion-ed" class="label">Descripción:</label>
-            <textarea id="descripcion-ed" name="descripcion" required class="input-required"></textarea>
+            <label for="detalle" class="label">Detalle(opcional)</label>
+            <textarea id="detalle" name="detalle" required class="input-required"></textarea>
             <br>
-            <label for="" class="label">Nueva Imagen (opcional)</label>
-            <input type="file" name="" id="img-ed" class="input-file">
-            <button id="enviar-ed" class="guardar-cambios-btn">Guardar Cambios</button>
-            <button id="cancelar-ed" class="cancelar-btn">Cancelar</button>
+            <button id="enviar-solicitud" class="guardar-cambios-btn">Crear solicitud</button>
+            <button id="cancelar-env" class="cancelar-btn">Cancelar</button>
         </form>
     </dialog>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ url_for('static',filename='javascript/tablasDinamicas.js') }}"></script>
     <script src="{{ url_for('static',filename='javascript/scriptAsignarRecolector.js') }}"></script>
+    <script src="{{ url_for('static',filename='javascript/crearSolicitudAdm.js') }}"></script>
 </body>
 {% endblock %}
 </html>

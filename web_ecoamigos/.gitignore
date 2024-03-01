@@ -2,3 +2,5 @@
 .env
 config.py
 __pycache__
+/app/utils/tokens.json
+/app/utils/client_secret_942503781738-bjc2ehu4amq499lq61c23d46jjqd8tsl.apps.googleusercontent.com.json

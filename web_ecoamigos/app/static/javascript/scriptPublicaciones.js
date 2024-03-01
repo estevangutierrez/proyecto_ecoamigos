@@ -68,7 +68,10 @@ function mostrarMensaje(message,icono) {
 
 // Editar
 const enviarEditado = document.getElementById('enviar-ed');
-enviarEditado.addEventListener('click', actualizarPublicacion);
+enviarEditado.addEventListener('click', (e) => {
+    e.preventDefault();
+    actualizarPublicacion()
+});
 
 const cancelarEditado = document.getElementById('cancelar-ed');
 cancelarEditado.addEventListener('click', cerrarModal);

@@ -1,5 +1,10 @@
-const actionButton = document.getElementById('enviar-btn');
+const actionButton = document.getElementById('enviar-btn'); 
 
+function recargarPagina() {
+    setTimeout(function() {
+        location.reload();
+    }, 3000);
+} 
 
 actionButton.addEventListener('click', (e) => {
     e.preventDefault()
@@ -30,6 +35,7 @@ actionButton.addEventListener('click', (e) => {
         if(data.ok){
             dialog.close()
             Swal.fire('Genial','Solicitud enviada exitosamente','success')
+            recargarPagina()
         } else if(data.existe){
             dialog.close()
             Swal.fire('Ups','No puedes enviar esta solicitud porque ya tienes una solicitud en proceso','warning')
@@ -37,7 +43,6 @@ actionButton.addEventListener('click', (e) => {
             dialog.close()
             Swal.fire('Ups','Ha ocurrido un error','error')
         }
-
     })
     .catch(error => {
         console.error("Ha ocurrido un error", error)

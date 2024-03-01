@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificado</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            padding: 2%;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 25px;
+        }
+
+        p {
+            color: #555;
+            margin: 10px 0;
+        }
+
+        .container {
+            background-color: #f4f4f4;
+            padding: 2%;
+            border-radius: 6px;
+        }
+
+        .header img {
+            width: 260px;
+        }
+
+        .cuerpo {
+            padding: 10%;
+        }
+
+        .foot {
+            margin-top: 25%
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header" style="display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center">
+            <img src="{{ url_for('static', filename='imagenes/logo.png', _external=True) }}" alt="">
+            <div>
+                <h1>Certificado de recolección</h1>
+            </div>
+            <div>
+                <p>Certificado No. {{ certificado.id_certificado }}</p>
+            </div>
+        </div>
+        <div class="cuerpo">
+            <p>Mediante este se certifica que <b>{{ certificado.nombre_proveedor }} CC {{ certificado.id_proveedor }}</b>, puso a disposición <b>{{ certificado.cant_recolectada }} Kilogramos</b> de ACU, que fueron recolectados por <b>{{ certificado.nombre_recolector }} CC {{ certificado.id_recolector }}</b>(recolector autorizado) el dia <b>{{ certificado.fecha_recoleccion.strftime('%d/%m/%Y') }}</b>.</p>
+        </div>
+        <div class="foot">
+             Maria Pulido Morea
+             <hr>
+             Firma
+        </div>
+    </div>
+</body>
+</html>
