@@ -42,6 +42,9 @@ class Proveedor(db.Model):
     def aumentar_puntos(self,nuevos_puntos):
         puntos = self.puntos + nuevos_puntos
         self.puntos = puntos
+    def restar_puntos(self,nuevos_puntos):
+        puntos = self.puntos - nuevos_puntos
+        self.puntos = puntos
 
 class Recolector(db.Model):
     __tablename__ = 'recolectores'

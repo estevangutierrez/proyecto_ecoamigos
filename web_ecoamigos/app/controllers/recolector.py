@@ -89,7 +89,7 @@ def confirmar_solicitud():
         )
 
         solicitud.estado = 'finalizada'
-        solicitud.token = 0
+        solicitud.liberar_token()
 
         proveedor = Proveedor.query.get(id_proveedor)
         proveedor.aumentar_puntos(puntos)

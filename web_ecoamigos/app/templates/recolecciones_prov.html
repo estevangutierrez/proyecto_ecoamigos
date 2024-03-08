@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
+    <title>Recolecciones</title>
+</head>
+{% extends "administrador.html" %}
+{% block contenido_admin %}
+<body>
+    <div class="cont-tabla">
+        <h3>Historial de recolecciones</h3>
+        <table class="mostrar-publicaciones" >
+            <thead>
+                <tr>
+                    <th scoope="col">ID</th>
+                    <th scoope="col">Fecha</th>
+                    <th scoope="col">CA</th>
+                    <th scoope="col">CR</th>
+                    <th scoope="col">Puntos</th>
+                    <th scoope="col">Valor</th>
+                    <th scoope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider tabla-mostrar">
+                {% for recoleccion in recolecciones %}
+                <tr>
+                    <td>{{ recoleccion.id }}</td>
+                    <td>{{ recoleccion.fecha }}</td>
+                    <td>{{ recoleccion.cantidad_s }}</td>
+                    <td>{{ recoleccion.cantidad_r }}</td>
+                    <td>{{ recoleccion.puntos }}</td>
+                    <td>${{ recoleccion.valor }}</td>
+                    <td><button class="ed-del eliminar" style="color:  #FF0000" title="Generar certificado"><i class="bi bi-file-earmark-pdf-fill"><a href="/generar_pdf/{{ recoleccion.id }}" target="_blank" style="color: #000"></a></i></button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination">
+            <!-- <button id="prevPage">Anterior</button> -->
+            <i class="bi bi-arrow-left-circle-fill" id="prevPage"></i>
+            <span id="currentPage">1</span>
+            <i class="bi bi-arrow-right-circle-fill" id="nextPage"></i>
+            <!-- <button id="nextPage">Siguiente</button> -->
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='javascript/paginacion.js') }}"></script>
+</body>
+{% endblock %}
+</html>

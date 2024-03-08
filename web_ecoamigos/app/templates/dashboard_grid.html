@@ -5,6 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-dashboard-flex.css') }}">
     <title>Proveedor</title>
+    <style>
+        .modal {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .label {
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .input-disabled {
+        cursor: not-allowed;
+        }
+        
+        .input-required,
+        .input-file {
+            margin-top: 5px;
+        }
+        
+        .input-required {
+            width: 100%;
+        }
+        
+        .input-file {
+            width: calc(100% - 20px); /* Para ajustar el ancho y considerar el padding del modal */
+        }
+        
+        .guardar-cambios-btn {
+            background-color: #127848;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .cancelar-btn {
+            background-color: #ccc;
+            color: #333;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .guardar-cambios-btn:hover,
+        .cancelar-btn:hover {
+            filter: brightness(0.9);
+        }
+        
+    </style>
 </head>
 {% extends "administrador.html" %}
 {% block contenido_admin %}
@@ -24,8 +80,8 @@
     <div class="contendor-dashboard">
         <div class="puntos">
             <p class="texto-puntos">Tus puntos</p>
-            <p class="numero-puntos">{{ proveedor.puntos }}</p>
-            <button type="button" style="cursor: pointer;">Canjear Puntos</button>
+            <p class="numero-puntos" id="puntos-activos">{{ proveedor.puntos }}</p>
+            <button type="button" style="cursor: pointer;" id="btn-solicitar-canjeo">Canjear Puntos</button>
         </div>
         <div class="recoleccionpendiente">
             {% if solicitud_p %}
@@ -41,36 +97,54 @@
             <button id="solicitador-recolecta" type="button" style="cursor: pointer;">Solicitar recoleccion</button>
         </div>
         <div class="contenedor-historialrecolecciones">
-            <p>Historial de recolecciones</p>
+            <p>Historial de solicitudes</p>
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Fecha<br>(DD/MM/AAAA)</th>
-                        <th>Cantidad aceite</th>
-                        <th>Valor</th>
-                        <th>Puntos</th>
-                        <th>Certificado</th>
+                        <th>Litros</th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
-                <tbody id="historial-recolecciones">
-                    {% for visita in visitas %}
+                <tbody id="historial-recolecciones" class="tabla-mostrar">
+                    {% for solicitud in solicitudes %}
                     <tr>
-                        <td>{{ visita.id }}</td>
-                        <td>{{ visita.fecha.strftime('%d/%m/%Y') }}</td>
-                        <td>{{ visita.cantidad }} Litros</td>
-                        <td>${{ visita.valor }}</td>
-                        <td>{{ visita.puntos }}</td>
-                        <td><button class="ed-del eliminar" style="color:  #FF0000" title="Generar certificado"><i class="bi bi-file-earmark-pdf-fill"><a href="/generar_pdf/{{ visita.id }}" target="_blank" style="color: #000">Certificado</a></i></button></td>
+                        <td>{{ solicitud.id }}</td>
+                        <td>{{ solicitud.fecha.strftime('%d/%m/%Y') }}</td>
+                        <td>{{ solicitud.cantidad }}</td>
+                        <td>{% if solicitud.estado.isnumeric() %}aceptada{% else %}{{ solicitud.estado }}{% endif %}</td>
                     </tr>
                     {% endfor%}
                 </tbody>
             </table>
+            <div class="pagination">
+                <!-- <button id="prevPage">Anterior</button> -->
+                <i class="bi bi-arrow-left-circle-fill" id="prevPage"></i>
+                <span id="currentPage">1</span>
+                <i class="bi bi-arrow-right-circle-fill" id="nextPage"></i>
+                <!-- <button id="nextPage">Siguiente</button> -->
+            </div>
         </div>
     </div>
+    <dialog id="form-canjeo" class="modal">
+        <label for="" class="label">Banco</label>
+        <select name="" id="banco">
+            <option value="none" selected disabled>SELECCIONA UN BANCO</option>
+            <option value="NEQUI">NEQUI</option>
+            <option value="BANCOLOMBIA">BANCOLOMBIA</option>
+            <option value="EFECTIVO">EFECTIVO</option>
+        </select>
+        <label for="" class="label">Número de cuenta</label>
+        <input type="text" id="cuenta" class="input-required">
+        <button id="enviar" class="guardar-cambios-btn">canjear</button>
+        <button id="cancelar-btn" class="cancelar-btn">Cancelar</button>
+    </dialog>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ url_for('static',filename='javascript/dashboard.js') }}"></script>
+    <script src="{{ url_for('static',filename='javascript/canjeos.js') }}"></script>
     <script src="{{ url_for('static',filename='javascript/crearSolicitud.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/paginacion.js') }}"></script>
 </body>
 {% endblock %}
 </html>

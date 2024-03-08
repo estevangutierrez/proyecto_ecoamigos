@@ -35,7 +35,7 @@
     <h3>Hola, {{ current_user.nombre.split()[0].capitalize() }}</h3>
     {% endif %}
     <div>
-        <a href="{{ url_for('auth.logout') }}"><i class="bi bi-box-arrow-in-left"></i></a>
+        <a href="{{ url_for('auth.logout') }}" id="cerrar-s"><i class="bi bi-box-arrow-in-left"></i></a>
     </div>
   </header>
   <aside class="menu">
@@ -47,7 +47,7 @@
             {% if current_user.rol == 'ADMINISTRADOR' %}
             <li id="opc-pub"><a href="{{ url_for('admin.publicaciones') }}">Publicaciones</a></li>
             <li id="opc-sol"><a href="{{ url_for('admin.solicitudes') }}">Solicitudes</a></li>
-            <li id=""><a href="">Canjeos</a></li>
+            <li id=""><a href="{{ url_for('admin.cargar_canjeos') }}">Canjeos</a></li>
             <li class="dropdown">
                 Usuarios
                 <div class="dropdown-content">
@@ -63,9 +63,10 @@
             <li id=""><a href="">Solicitudes</a></li>
             <li id=""><a href="">Historial</a></li>
             {% elif current_user.rol == 'PROVEEDOR'%}
+            <li id=""><a href="{{ url_for('proveedor.proveedor_home') }}">Resumen</a></li>
             <li id=""><a href="">Perfil</a></li>
-            <li id=""><a href="">Canjeos</a></li>
-            <li id=""><a href="">Recolecciones</a></li>
+            <li id=""><a href="{{ url_for('proveedor.cargar_canjeos') }}">Canjeos</a></li>
+            <li id=""><a href="{{ url_for('proveedor.cargar_recolecciones') }}">Recolecciones</a></li>
             {% endif %}
         </ul>
     </nav>
@@ -88,6 +89,6 @@
         });
     });
 </script>
-  <!-- <script src="{{ url_for('static',filename='javascript/tokens.js') }}"></script> -->
+  <script src="{{ url_for('static',filename='javascript/cerrarSesion.js') }}"></script>
 </body>
 </html>

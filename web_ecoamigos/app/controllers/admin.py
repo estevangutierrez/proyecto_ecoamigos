@@ -3,11 +3,12 @@ from app.models.usuarios import Usuario
 from app.models.models_roles import Administrador, Recolector, Proveedor
 from app.models.models_barrios import Comuna, Barrio
 from app.models.models_publico import Noticia
-from app.models.models_registros import Solicitud, Visita
+from app.models.models_registros import Solicitud, Visita, Canjeo
 from app.utils.generar_contrasena import generar_contrasena
 from app.utils.enviar_correo import enviar_correo
-from flask_login import login_required
+from flask_login import login_required, current_user
 from app import roles_required
+import base64
 from app.models import db
 
 admin = Blueprint('admin', __name__)
@@ -126,6 +127,70 @@ def solicitudes():
     return render_template("solicitudes.html", solicitudes=solicitudes, recolectores=recolectores,solicitudes_a=solicitudes_a, visitas=visitas, solicitudes_v=solicitudes_v, proveedores=proveedores)
 
 
+@admin.route('/administrador/canjeos')
+@login_required
+@roles_required('ADMINISTRADOR')
+def cargar_canjeos():
+    consulta = db.session.query(Canjeo, Proveedor).join(Proveedor, Canjeo.id_proveedor==Proveedor.id_proveedor).all()
+    canjeos = []
+
+    for canjeo,proveedor in consulta:
+        canjeo_dict = {
+            'id':canjeo.id_canjeo,
+            'nombre':proveedor.nombre,
+            'cedula':canjeo.id_proveedor,
+            'banco':canjeo.medio,
+            'cuenta':canjeo.cuenta,
+            'puntos':canjeo.puntos,
+            'valor':canjeo.valor,
+            'estado':canjeo.estado
+        }
+        canjeos.append(canjeo_dict)
+
+    return render_template('gestCanjeos.html',canjeos=canjeos)
+
+@admin.route('/administrador/canjeos/confirmar_canjeo', methods=['PUT'])
+@login_required
+@roles_required('ADMINISTRADOR')
+def confirmar_canjeo():
+    datos = request.get_json()
+    id_canjeo = datos.get('id_canjeo')
+    imagen_base64 = datos.get('imagenURL').split(',')[1]
+    imagen_binario = base64.b64decode(imagen_base64)
+    administrador = current_user.id
+
+    canjeo = Canjeo.query.get(id_canjeo)
+    proveedor = Proveedor.query.get(canjeo.id_proveedor)
+
+    correo = proveedor.correo
+
+    if canjeo is None:
+        return jsonify({'mensaje':'Canjeo no existente, actualiza la página','icono':'error'})
+    
+    try:
+        canjeo.soporte = imagen_binario
+        canjeo.id_administrador = administrador
+        canjeo.estado = 'canjeado'
+
+        enviar_correo(correo,'Hemos realizado tu canjeo, revisa tu cuenta',asunto='HEMOS REALIZADO TU CANJEO')
+
+
+        db.session.commit()
+        return jsonify({'mensaje':'Canjeo realizado exitosamente','icono':'success'})
+    except Exception as e:
+        db.session.rollback()
+        print(f'El error fue {e}')
+        return jsonify({'mensaje':'Hubo un error al realizar el canjeo','icono':'error'})
+    finally:
+        db.session.close()
+        
+
+
+    
+
+
+
+
 #LEER
 @admin.route('/administradores')
 @login_required
@@ -177,7 +242,17 @@ def nuevo_administrador():
     db.session.commit()
     db.session.close()
 
-    enviar_correo(correo,f'Usuario: {id}\nContraseña: {contrasena}')
+    cuerpo_correo = f'''
+        Hola {nombre}, bienvenido a la familia Ecofriendly. 
+        Aquí están tus credenciales de acceso en el rol de {rol}
+
+        Usuario: {id}
+        Contraseña: {contrasena}
+        
+        Recuerda cambiar tu contraseña luego de inciar sesión por primera vez. =D
+        '''
+
+    enviar_correo(correo,cuerpo_correo)
 
     return jsonify({'success': True})
 
@@ -394,7 +469,19 @@ def rechazar_solicitud():
 
     try:
         solicitud = Solicitud.query.get(id_solicitud)
+        proveedor = Proveedor.query.get(solicitud.id_proveedor)
+        nombre = proveedor.nombre
+        correo = proveedor.correo
+
         solicitud.estado = 'rechazada'
+        solicitud.liberar_token()
+
+        cuerpo_correo = f'''Hola, { nombre }!
+        Hemos rechazado tu solicitud {id_solicitud} porque nos lo has pedido.
+        Si esto no es correcto, por favor, comunicate con nosotros.
+        Atte: Equipo de Ecofriendly MVD'''
+        
+        enviar_correo(correo,cuerpo_correo,asunto='Tu solicitud ha sido rechazada')
 
         db.session.commit()
         return jsonify({'mensaje':'Solicitud rechazada exitosamente','icono':'success'})

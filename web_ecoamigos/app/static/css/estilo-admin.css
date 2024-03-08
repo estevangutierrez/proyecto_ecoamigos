@@ -311,10 +311,11 @@ input[type=number]::-webkit-outer-spin-button {
 
 .cont-login {
     background-color: #127848;
-    width: 20%;
-    padding: 3%;
+    max-width: 400px;
+    padding: 5%;
     border-radius: 6px;
     margin: auto;
+    box-sizing: border-box;
 }
 
 .login-back {
@@ -324,7 +325,7 @@ input[type=number]::-webkit-outer-spin-button {
 .cont-login h3 {
     color:#fff;
     text-align: center;
-    font-size: 30px;
+    font-size: 2em;
     margin: 0% auto 6% auto;
 }
 
@@ -480,23 +481,7 @@ input[type=number]::-webkit-outer-spin-button {
     .nav-bar {
       margin-top: 0; /* Ajusta el margen superior del menú de navegación */
     }
-
-    /* #nav-bar {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-        z-index: 1;
-    }
-
-    #nav-bar.active {
-        display: flex;
-    }
-
-    .menu-icon {
-        display: block;
-        cursor: pointer;
-    }
-   */
+     
     .cont-publicaciones {
       grid-template-areas:
           "filtro"
@@ -525,14 +510,6 @@ input[type=number]::-webkit-outer-spin-button {
       margin: 2% 0;
     }
   
-    .cont-login {
-      width: 100%; /* Ajusta el ancho del contenedor de login en dispositivos móviles */
-    }
-  
-    .label-login {
-      align-items: flex-start; /* Ajusta la alineación en móviles */
-    }
-  
     .pagination {
       font-size: 16px; /* Ajusta el tamaño de la paginación en dispositivos móviles */
     }
@@ -540,6 +517,14 @@ input[type=number]::-webkit-outer-spin-button {
     .formulario-emergente,
     .fondo-oscuro {
       display: none; /* Oculta el formulario emergente y el fondo oscuro en móviles */
+    }
+
+    .cont-login {
+        width: 90%; /* Reducir el ancho en pantallas pequeñas */
+    }
+
+    .cont-login h3 {
+        font-size: 1.5em; /* Reducir el tamaño del texto en pantallas pequeñas */
     }
   }
   

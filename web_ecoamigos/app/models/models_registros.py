@@ -1,6 +1,6 @@
 from . import db, func
 import random
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, LargeBinary
 
 class Solicitud(db.Model):
     __tablename__ = 'solicitudes'
@@ -25,7 +25,6 @@ class Solicitud(db.Model):
 
         self.token = nuevo_token    
         
-    
     def liberar_token(self):
         self.token  = 1
         
@@ -46,7 +45,16 @@ class Certificado(db.Model):
     id_certificado  = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     id_visita       = db.Column(db.Integer, ForeignKey('visitas.id_visita'), nullable=True)
     tipo            = db.Column(db.String(15), nullable=False)
-    
-          
 
-
+class Canjeo(db.Model):
+    __tablename__ = 'canjeos'
+    id_canjeo       = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id_proveedor    = db.Column(db.Integer, ForeignKey('proveedores.id_proveedor'), nullable=False)
+    id_administrador= db.Column(db.Integer, ForeignKey('administradores.id_admin'), nullable=True)  
+    medio           = db.Column(db.String(20), nullable=False)
+    cuenta          = db.Column(db.BigInteger, nullable=True)
+    puntos          = db.Column(db.Integer, nullable=False)
+    valor           = db.Column(db.Integer, nullable=False)
+    fecha           = db.Column(db.DateTime(timezone=True))
+    soporte          = db.Column(LargeBinary, nullable=True)
+    estado          = db.Column(db.String(20), default='pendiente')

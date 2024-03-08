@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-dashboard-flex.css') }}">
+    <title>Mis canjeos</title>
+</head>
+{% extends "administrador.html" %}
+{% block contenido_admin %}
+<body>
+    <div style="display: flex;" id="misCanjeos">
+        <div class="canjeo-p recoleccionpendiente" style=" width: 30%;" id="canjeo-p">
+            {% for canjeo in canjeos %}
+                {% if canjeo.estado == 'pendiente' %}
+                <div>
+                    <p class="texto-recoleccion">Usted tiene un canjeo pendiente<br>
+                        <b>ID:</b> {{ canjeo.id }}<br>
+                        <b>Puntos:</b> {{ canjeo.puntos }}<br>
+                        <b>Valor:</b> ${{ canjeo.valor }}<br><br>
+
+                        <span>Lo recibirá el jueves en su cuenta {{ canjeo.banco }} {{ canjeo.cuenta }}.</span>
+                    </p>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="cont-tabla" style="width: 60%;" id="h-canjeos">
+            <h4>HISTORIAL DE CANJEOS</h4>
+            <table class="mostrar-publicaciones">
+                <thead>
+                    <tr>
+                        <th scoope="col">ID canjeo</th>
+                        <th scoope="col">Puntos</th>
+                        <th scoope="col">Valor</th>
+                        <th scoope="col">Banco</th>
+                        <th scoope="col">Cuenta</th>
+                        <th scope="col">Comprobante</th>
+                    </tr>
+                </thead>
+                <tbody class="tabla-mostrar">
+                    {% for canjeo in canjeos %}
+                        {% if canjeo.estado == 'canjeado' %}
+                        <tr>
+                            <td>{{ canjeo.id }}</td>
+                            <td>{{ canjeo.puntos }}</td>
+                            <td>${{ canjeo.valor }}</td>
+                            <td>{{ canjeo.banco }}</td>
+                            <td>{{ canjeo.cuenta }}</td>
+                            <td><button class="btn-comprobante" value="{{ canjeo.id }}"><i class="bi bi-receipt"></i></button></td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="pagination">
+                <!-- <button id="prevPage">Anterior</button> -->
+                <i class="bi bi-arrow-left-circle-fill" id="prevPage"></i>
+                <span id="currentPage">1</span>
+                <i class="bi bi-arrow-right-circle-fill" id="nextPage"></i>
+                <!-- <button id="nextPage">Siguiente</button> -->
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="{{ url_for('static',filename='javascript/soportes.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/paginacion.js') }}"></script>
+</body>
+{% endblock %}
+</html>

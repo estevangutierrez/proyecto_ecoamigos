@@ -101,7 +101,7 @@
                     <th scoope="col"></th>
                 </tr>
             </thead>
-            <tbody class="table-group-divider tabla-mostrar" id="proveedor-tabla">
+            <tbody class="table-group-divider tabla-mostrar" id="tabla-pendientes">
                 {% for solicitud in solicitudes %}
                     {% if solicitud.estado == 'pendiente' %}
                         <tr>
@@ -110,7 +110,7 @@
                             <td>{{ solicitud.fecha }}</td>
                             <td>{{ solicitud.cantidad }}</td>
                             <td><input type="checkbox" name=""></td>
-                            <td><button class="ed-del eliminar" style="color: red;"><i class="bi bi-x-lg" id="rechazar-sol"></i></button></td>
+                            <td><button class="ed-del eliminar rechazar-sol" style="color: red;"><i class="bi bi-x-lg"></i></button></td>
                         </tr>
                     {% endif %}
                 {% endfor %}
@@ -120,6 +120,15 @@
     </div>
     <div class="cont-tabla tabla-solicitud">
         <h4>SOLICITUDES ASIGNADAS</h4>
+        <div style="float: right;">
+            <span>Asignar a otro recolector</span>
+            <select name="" id="a-reco-select">
+                <option value="null" selected>Seleccionar</option>
+                {% for recolector in recolectores %}
+                    <option value="{{ recolector.id }}">{{ recolector.nombre }}</option>
+                {% endfor %} 
+            </select>
+        </div>
         <table class="mostrar-publicaciones">
             <thead>
                 <tr>
@@ -129,11 +138,11 @@
                     <th scoope="col">Cantidad</th>
                     <th scoope="col">Asignado</th>
                     <th>Token</th>
-                    <th scoope="col"></th>
+                    <th scoope="col"><input type="checkbox" id="a-todos-sel"></th>
                     <th scoope="col"></th>
                 </tr>
             </thead>
-            <tbody class="table-group-divider tabla-mostrar" id="proveedor-tabla">
+            <tbody class="table-group-divider tabla-mostrar"  id="tabla-asignadas">
                 {% for solicitud_a in solicitudes_a %}
                         <tr>
                             <td>{{ solicitud_a.id }}</td>
@@ -142,12 +151,13 @@
                             <td>{{ solicitud_a.cantidad }}</td>
                             <td>{{ solicitud_a.asignado }}</td>
                             <td>{{ solicitud_a.token }}</td>
-                            <td><button class="ed-del eliminar" style="color: gray;" title="Asignar a otro"><i class="bi bi-person-plus-fill" style="color: gray"></i></button></td>
-                            <td><button class="ed-del eliminar" style="color: red;" title="Cerrar solicitud"><i class="bi bi-x-lg"></i></button></td>
+                            <td><input type="checkbox" name="" id=""></td>
+                            <td><button class="ed-del eliminar rechazar-sol" style="color: red;" title="Cerrar solicitud"><i class="bi bi-x-lg"></i></button></td>
                         </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <div><button class="btn-agregar" id="reasignar-rec">Re-asignar</button></div>
     </div>
     <div class="cont-tabla tabla-solicitud">
         <h4>SOLICITUDES VENCIDAS</h4>
@@ -226,6 +236,7 @@
     <script src="{{ url_for('static',filename='javascript/tablasDinamicas.js') }}"></script>
     <script src="{{ url_for('static',filename='javascript/scriptAsignarRecolector.js') }}"></script>
     <script src="{{ url_for('static',filename='javascript/crearSolicitudAdm.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/paginacion.js') }}"></script>
 </body>
 {% endblock %}
 </html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
+    <title>Gestionar Canjeos</title>
+    <style>
+        .tarjeta {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 10px;
+            width: 300px;
+            margin: 2% auto;
+        }
+    
+        .tarjeta span {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+    
+        .tarjeta input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f4f4f4;
+        }
+    
+        .tarjeta button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    
+        .tarjeta button:hover {
+            background-color: #45a049;
+        }
+
+        .tabla-canjeos {
+            display: grid;
+            grid-template-columns: 2fr 2fr 2fr;
+        }
+
+        .doble-inp {
+            display: flex;
+        }
+    </style>
+</head>
+{% extends "administrador.html" %}
+{% block contenido_admin %}
+<body>
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+    <div class="menu-tablas" style="display: flex; justify-content: space-around; padding: 20px 40px; width: 90%; margin: auto; border-bottom: 2px solid #e6e6e6;">
+        <span>Canjeos pendientes</span>
+        <span>Historial de canjeos</span>
+    </div>
+    <div class="cont-tabla">
+        <div class="tabla-canjeos">
+            {% for canjeo in canjeos %}
+                {% if canjeo.estado == 'pendiente' %}
+                <div class="tarjeta">
+                    <span>Nombre</span>
+                    <input type="text" disabled value="{{ canjeo.nombre }}">
+                    <span>Cedula</span>
+                    <input type="text" disabled value="{{ canjeo.cedula }}">
+                    <div class="doble-inp">
+                        <div>
+                            <span>Banco</span>
+                            <input type="text" disabled value="{{ canjeo.banco }}">
+                        </div>
+                        <div>   
+                            <span>Cuenta</span>
+                            <input type="text" disabled value="{{ canjeo.cuenta }}">
+                        </div>
+                    </div>
+                    <div class="doble-inp">
+                        <div>
+                            <span>Puntos</span>
+                            <input type="text" disabled value="{{ canjeo.puntos }}">
+                        </div>
+                        <div>
+                            <span>Valor</span>
+                            <input type="text" disabled value="${{ canjeo.valor }}">
+                        </div>
+                    </div>
+                    <div>
+                        <button  class="adm-canjear-btn" value="{{ canjeo.id }}">Canjear</button>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="cont-tabla tabla-solicitud">
+        <table class="mostrar-publicaciones">
+            <thead>
+                <tr>
+                    <th scoope="col">ID canjeo</th>
+                    <th scoope="col">Proveedor</th>
+                    <th scoope="col">Banco</th>
+                    <th scoope="col">Cuenta</th>
+                    <th scoope="col">Puntos</th>
+                    <th scoope="col">Valor</th>
+                </tr>
+            </thead>
+            <tbody class="tabla-mostrar">
+                {% for canjeo in canjeos %}
+                    {% if canjeo.estado != 'pendiente' %}
+                    <tr>
+                        <td style="display: none;">{{ canjeo.cedula }}</td>
+                        <td>{{ canjeo.id }}</td>
+                        <td>{{ canjeo.nombre }}</td>
+                        <td>{{ canjeo.banco }}</td>
+                        <td>{{ canjeo.cuenta }}</td>
+                        <td>{{ canjeo.puntos }}</td>
+                        <td>${{ canjeo.valor }}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="{{ url_for('static',filename='javascript/canjearADM.js') }}"></script>
+    <script src="{{ url_for('static',filename='javascript/tablasDinamicas.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/paginacion.js') }}"></script>
+</body>
+{% endblock %}
+</html>
