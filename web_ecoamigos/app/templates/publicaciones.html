@@ -68,13 +68,7 @@ cursor: not-allowed;
 <body>
         <div class="filtro">
             <div class="input-filtro">
-                <select name="" id="">
-                    <option value="default"></option>
-                    <option value="">Autor 1</option>
-                    <option value="">Autor 2</option>
-                    <option value="">Autor 3</option>
-                </select>
-                <input type="date" name="" id="">
+                <input type="date" name="" id="filtro-fecha">
                 <button id="btn-buscar-filtro"><i class="bi bi-search"></i></button>
             </div>
             <div>
@@ -147,6 +141,7 @@ cursor: not-allowed;
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <script src="{{ url_for('static', filename='javascript/ventanasEmergentes.js') }}"></script>
         <script src="{{ url_for('static', filename='javascript/scriptPublicaciones.js') }}"></script>
+        <script src="{{ url_for('static', filename='javascript/filtroPublicaciones.js') }}"></script>
         <script src="{{ url_for('static', filename='javascript/paginacion.js') }}"></script>
 </body>
 </html>

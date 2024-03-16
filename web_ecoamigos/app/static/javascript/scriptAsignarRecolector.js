@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
-                cancelButtonText: 'Salir',
+                cancelButtonText: 'Cancelar',
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Sí, rechazar"
             }).then((result) => {

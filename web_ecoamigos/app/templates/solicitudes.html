@@ -62,8 +62,7 @@
 
         #detalle {
             height: 60px;
-        }
-        
+        }   
     </style>
 </head>
 {% extends "administrador.html" %}
@@ -168,7 +167,6 @@
                     <th scoope="col">Proveedor</th>
                     <th scoope="col">Fecha</th>
                     <th scoope="col">Cantidad</th>
-                    <th scoope="col"><input type="checkbox" name="" id="" title="Seleccionar todos"></th>
                 </tr>
             </thead>
             <tbody class="table-group-divider tabla-mostrar" id="proveedor-tabla">
@@ -178,7 +176,6 @@
                             <td>{{ solicitud_v.proveedor }}</td>
                             <td>{{ solicitud_v.fecha_solicitud }}</td>
                             <td>{{ solicitud_v.cantidad }}</td>
-                            <td><input type="checkbox"></td>
                         </tr>
                 {% endfor %}
             </tbody>

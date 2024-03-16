@@ -34,17 +34,19 @@
     {% if current_user.is_authenticated %}
     <h3>Hola, {{ current_user.nombre.split()[0].capitalize() }}</h3>
     {% endif %}
-    <div>
+    <div class="cerrar-sesion">
         <a href="{{ url_for('auth.logout') }}" id="cerrar-s"><i class="bi bi-box-arrow-in-left"></i></a>
     </div>
   </header>
   <aside class="menu">
     <div>
         <img src="{{ url_for('static', filename='imagenes/minilogo.png') }}" alt="esta es una imagen" id="imagennn">
+        <h4 style="text-align: center; color: #EEE">{{ current_user.rol }}</h4>
     </div>
     <nav>
         <ul class="nav-bar" id="nav-bar">
             {% if current_user.rol == 'ADMINISTRADOR' %}
+            <li id=""><a href="{{ url_for('auth.cargar_perfil') }}">Perfil</a></li>
             <li id="opc-pub"><a href="{{ url_for('admin.publicaciones') }}">Publicaciones</a></li>
             <li id="opc-sol"><a href="{{ url_for('admin.solicitudes') }}">Solicitudes</a></li>
             <li id=""><a href="{{ url_for('admin.cargar_canjeos') }}">Canjeos</a></li>
@@ -59,12 +61,12 @@
                 </div>
             </li>
             {% elif current_user.rol == 'RECOLECTOR' %}
-            <li id=""><a href="">Perfil</a></li>
-            <li id=""><a href="">Solicitudes</a></li>
-            <li id=""><a href="">Historial</a></li>
+            <li id=""><a href="{{ url_for('auth.cargar_perfil') }}">Perfil</a></li>
+            <li id=""><a href="{{ url_for('recolector.recolector_home') }}">Solicitudes</a></li>
+            <li id=""><a href="{{ url_for('recolector.cargar_historial') }}">Historial</a></li>
             {% elif current_user.rol == 'PROVEEDOR'%}
+            <li id=""><a href="{{ url_for('auth.cargar_perfil') }}">Perfil</a></li>
             <li id=""><a href="{{ url_for('proveedor.proveedor_home') }}">Resumen</a></li>
-            <li id=""><a href="">Perfil</a></li>
             <li id=""><a href="{{ url_for('proveedor.cargar_canjeos') }}">Canjeos</a></li>
             <li id=""><a href="{{ url_for('proveedor.cargar_recolecciones') }}">Recolecciones</a></li>
             {% endif %}

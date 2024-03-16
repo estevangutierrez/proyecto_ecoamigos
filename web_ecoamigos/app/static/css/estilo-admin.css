@@ -27,7 +27,6 @@
 
 html, body {
     height: 100%;
-    background-color: #eee;
     margin: 0;
     padding: 0;
 }
@@ -452,6 +451,22 @@ input[type=number]::-webkit-outer-spin-button {
     display: none;
 }
 
+#misCanjeos {
+    display: flex; 
+    flex-direction: row;
+}
+
+.recoleccionpendiente {
+    width: 30%;
+    flex: 1
+}
+
+#h-canjeos {
+    width: 60%;
+    flex: 2
+}
+
+
 /* Estilos generales */
 
 @media only screen and (max-width: 767px) {
@@ -472,6 +487,7 @@ input[type=number]::-webkit-outer-spin-button {
     .header {
       flex-direction: column; /* Cambia la dirección del flex para el header en móviles */
       text-align: center;
+      height: fit-content;
     }
   
     .header i:hover {
@@ -495,7 +511,7 @@ input[type=number]::-webkit-outer-spin-button {
     }
   
     .cont-tabla {
-      width: 100%; /* Ajusta el ancho de la tabla en dispositivos móviles */
+      width: fit-content; /* Ajusta el ancho de la tabla en dispositivos móviles */
       margin: 1% 0;
     }
   
@@ -520,11 +536,21 @@ input[type=number]::-webkit-outer-spin-button {
     }
 
     .cont-login {
+        margin-top: 50%;
         width: 90%; /* Reducir el ancho en pantallas pequeñas */
     }
 
     .cont-login h3 {
         font-size: 1.5em; /* Reducir el tamaño del texto en pantallas pequeñas */
+    }
+
+    #misCanjeos {
+        display: block; 
+    }
+    
+    .recoleccionpendiente, #h-canjeos, .h-recolecciones {
+        width:fit-content;
+        margin: auto
     }
   }
   

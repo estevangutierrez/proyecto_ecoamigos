@@ -1,11 +1,180 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Perfil</title>
+  <link rel="stylesheet" href="../static/css/estilo-perfil.css">
+  <style>
+    .button {
+        width: 20%;
+        font-size: 18px;
+        padding: 8px 6px;
+        background-color: #127848;
+        color: #fff;
+        border-radius: 4px;
+        border: none;
+    }
+
+    .options {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+    }
+
+    .modal {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      }
+
+  .label {
+      margin-top: 10px;
+      display: block;
+  }
+
+  .input-disabled {
+  cursor: not-allowed;
+  }
+
+  .input-required {
+      margin-top: 5px;
+  }
+
+  .input-required {
+      width: 100%;
+  }
+
+  .guardar-cambios-btn {
+      background-color: #127848;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+  }
+
+  .cancelar-btn {
+      background-color: #ccc;
+      color: #333;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+  }
+
+  .guardar-cambios-btn:hover,
+  .cancelar-btn:hover {
+      filter: brightness(0.9);
+  }
+  </style>
 </head>
+{% extends "administrador.html" %}
+{% block contenido_admin %}
 <body>
-    
+  <div class="perfil">
+    <div class="avatar">
+      <img src="../static/imagenes/usuario.png" alt="Foto de perfil">
+      <h2 id="rol">{{ current_user.rol }}</h2>
+    </div>
+    <div class="info">
+      <h1 id="nombre_a">{{ current_user.nombre }}</h1>
+      <div class="datos">
+        <strong>CC:</strong> 
+        <p id="cedula_a">{{ current_user.id }} </p>
+        {% if usuario.direccion %}
+        <strong>Dirección:</strong> 
+        <p id="direccion_a">{{ usuario.direccion }}</p>
+        {% endif %}
+        {% if usuario.id_comuna %}
+        <strong>Comuna:</strong> 
+        <p id="comuna_a">{{ usuario.id_comuna }}</p>
+        {% endif %}
+        {% if usuario.id_barrio %}
+        <strong>Barrio:</strong> 
+        <p id="barrio_a">{{ usuario.id_barrio }}</p>
+        {% endif %}
+        <strong>Correo:</strong> 
+        <p id="correo_a">{{ usuario.correo }}</p>
+        <strong>Celular:</strong>
+        <p id="celular_a">{{ usuario.celular }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="options">
+    <button id="actualizar-datos-btn" class="button">Actualizar Datos</button>
+    <button class="button" id="cambiar-contrasena-btn">Cambiar contraseña</button>
+  </div>
+  <div id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+  <dialog id="actualizar-datos" class="modal">
+    <h2>Actualizar Datos</h2>
+    <form action="">
+      {% if current_user.rol != 'ADMINISTRADOR' %}
+      <label for="id" class="label">Cédula</label>
+      <input type="number" name="id" id="cedula" disabled class="input-disabled">
+      <label for="nombre" class="label">Nombre</label>
+      <input type="text" id="nombre" name="nombre" required class="input-required">
+      <br>
+      <label for="correo" class="label">Correo</label>
+      <input type="text" id="correo" name="correo" required class="input-required">
+      <br>
+      <label for="celular">Celular</label>
+      <input type="number" name="celular" id="celular" required class="input-required">
+      <br>
+      <label for="comuna" class="label">Comuna</label>
+      <select name="comuna" id="comuna" required class="input-required">
+        {% for comuna in comunas %}
+        <option value="{{ comuna.id_comuna }}">{{ comuna.comuna }}</option>
+        {% endfor %}
+      </select>
+      <br>
+      <label for="barrio">Barrio</label>
+      <select name="barrio" id="barrio" required class="input-required">
+        {% for barrio in barrios %}
+        <option value="{{ barrio.id_barrio }}">{{ barrio.nombre }}</option>
+        {% endfor %}
+      </select>
+      <br>
+      <label for="direccion">Direccion</label>
+      <input type="text" name="direccion" id="direccion" class="input-required">
+      <br>
+      {% else %}
+      <label for="id" class="label">Cédula</label>
+      <input type="number" name="id" id="cedula" disabled class="input-disabled">
+      <label for="nombre" class="label">Nombre</label>
+      <input type="text" id="nombre" name="nombre" required class="input-required">
+      <br>
+      <label for="correo" class="label">Correo</label>
+      <input type="text" id="correo" name="correo" required class="input-required">
+      <br>
+      <label for="celular">Celular</label>
+      <input type="number" name="celular" id="celular" required class="input-required">
+      <br>
+      {% endif %}
+      <button id="enviar-ed" class="guardar-cambios-btn">Guardar Cambios</button>
+      <button id="cancelar-ed" class="cancelar-btn">Cancelar</button>
+    </form>
+  </dialog>
+  <dialog id="cambiar-contrasena" class="modal">
+    <input type="hidden" name="id-usuario" id="id-usuario" value="{{ current_user.id }}">
+    <label for="contrasena_a" class="label">Contraseña actual</label>
+    <input type="password" name="contrasena_a" id="contrasena_a" required class="input-required">
+    <label for="contrasena_n" class="label">Nueva contraseña</label>
+    <input type="password" id="contrasena_n" name="contrasena_n" required class="input-required">
+    <label for="check_c" class="label">Repita la nueva contraseña</label>
+    <input type="password" name="check_c" id="check_c" required class="input-required">
+    <button id="enviar-c" class="guardar-cambios-btn">Guardar Cambios</button>
+    <button id="cancelar-c" class="cancelar-btn">Cancelar</button>
+  </dialog>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="{{ url_for('static',filename='javascript/actualizarDatos.js') }}"></script>
+<script src="{{ url_for('static',filename='javascript/cambiarContrasena.js') }}"></script>
+{% endblock %}
 </html>

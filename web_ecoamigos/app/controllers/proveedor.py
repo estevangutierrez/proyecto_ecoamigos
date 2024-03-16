@@ -3,6 +3,8 @@ from app.models.models_roles import Proveedor
 from app.models.models_registros import Solicitud, Visita, Canjeo
 from flask_login import login_required, current_user
 from app.models import db
+from app.models.usuarios import Usuario
+from app.utils.enviar_correo import enviar_correo
 from datetime import datetime
 from app import roles_required
 from app.utils.generar_token import generar_token
@@ -34,6 +36,56 @@ def proveedor_home():
 
     solicitud_p = db.session.query(Solicitud).filter(Solicitud.id_proveedor==proveedor.id_proveedor,Solicitud.estado!='finalizada').filter(Solicitud.estado!='rechazada').filter(Solicitud.estado!='vencida').first()
     return render_template('dashboard_grid.html', proveedor=proveedor,solicitud_p=solicitud_p,solicitudes=solicitudes)
+
+@proveedor.route('/proveedor/actualizar_datos', methods=['PUT'])
+@login_required
+@roles_required(['PROVEEDOR','ADMINISTRADOR'])
+def actualizar_datos():
+    datos = request.get_json()
+
+    id = datos.get('cedula')
+
+    nuevos_datos = {
+        'nombre': datos.get('nombre').upper(),
+        'direccion': datos.get('direccion').upper(),
+        'comuna': datos.get('comuna'),
+        'barrio': datos.get('barrio'),
+        'correo': datos.get('correo').upper(),
+        'celular': datos.get('celular')
+    }
+
+    print(nuevos_datos)
+
+    proveedor = Proveedor.query.get(id)
+    if proveedor:
+       usuario = Usuario.query.get(id)
+       try:
+           usuario.actualizar_usuario(nombre=datos.get('nombre'), correo=datos.get('correo'))
+           proveedor.actualizar_datos(nuevos_datos)
+
+           mensaje_actualización_datos = '''
+Hola,
+
+Queremos informarte que se han realizado actualizaciones en tus datos de usuario. Si realizaste estos cambios, ignora este mensaje. En caso contrario, por favor, contáctanos lo antes posible para investigar cualquier actividad sospechosa.
+
+¡Gracias por ser parte de nuestra comunidad!
+
+Saludos cordiales,
+El equipo de Ecofriendly
+'''
+           enviar_correo(datos.get('correo'),mensaje_actualización_datos,asunto='Actualizaste tus datos')
+           db.session.commit()
+
+           return jsonify({'mensaje':'Datos actualizados correctamente','icono':'success'})
+       
+       except Exception as e:
+           print(e)
+           db.session.rollback()
+           return jsonify({'mensaje':'Error al actualizar los datos','icono':'error'})
+       finally:
+           db.session.close()
+    
+    return jsonify({'mensaje':f'No se encontró proveedor con el ID {id}','icono':'error'})
 
 @proveedor.route('/proveedor/recolecciones')
 @login_required
@@ -68,7 +120,12 @@ def enviar_solicitud():
         id = datos.get('proveedor')
 
     proveedor = Proveedor.query.filter_by(id_proveedor=id).first()
-    solicitud_pendiente = db.session.query(Solicitud).filter(Solicitud.id_proveedor==id,Solicitud.estado!='finalizada').filter(Solicitud.estado!='rechazada').filter(Solicitud.estado!='vencida').first()
+    solicitud_pendiente = (db.session.query(Solicitud)
+                           .filter(Solicitud.id_proveedor==id,Solicitud.estado!='finalizada')
+                           .filter(Solicitud.estado!='rechazada')
+                           .filter(Solicitud.estado!='vencida').first()
+                           )
+    
     solicitudes = Solicitud.query.all()
 
     tokens = []

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar contraseña</title>
+    <style>
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-image: url('../static/imagenes/minilogo.png');
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        color: #127848;
+    }
+
+    .modal {
+    width: fit-content;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    display: block;
+    margin: 10% auto;
+    text-align: center;
+      }
+
+  .label {
+      margin: 5px;
+      display: block;
+  }
+
+  .input-required {
+      margin: 10px;
+      width: 90%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      height: 30px;
+  }
+
+  .guardar-cambios-btn {
+      background-color: #127848;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 2%;
+  }
+
+  .cancelar-btn {
+      background-color: #ccc;
+      color: #333;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+      margin-top: 2%;
+  }
+
+  .guardar-cambios-btn:hover,
+  .cancelar-btn:hover {
+      filter: brightness(0.9);
+  }
+    </style>
+</head>
+<body>
+    <div id="cambiar-contrasena" class="modal">
+        <h1>Recupera tu contraseña</h1>
+        <label for="documento" class="label">Numero de documento</label>
+        <input type="number" name="documento" id="documento" required class="input-required" autocomplete="off">
+        <label for="correo" class="label">Correo electrónico</label>
+        <input type="email" id="correo" name="correo" required class="input-required" autocomplete="off">
+        <button id="cancelar" class="cancelar-btn">Volver</button>
+        <button id="enviar" class="guardar-cambios-btn">Enviar</button>
+      </div>
+</body>
+</html>

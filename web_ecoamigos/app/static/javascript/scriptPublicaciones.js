@@ -74,7 +74,10 @@ enviarEditado.addEventListener('click', (e) => {
 });
 
 const cancelarEditado = document.getElementById('cancelar-ed');
-cancelarEditado.addEventListener('click', cerrarModal);
+cancelarEditado.addEventListener('click', (e) => {
+    e.preventDefault()
+    cerrarModal();
+});
 
 let filaActual; // Variable para almacenar la fila actualmente editada
 

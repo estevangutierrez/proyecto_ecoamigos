@@ -2,9 +2,11 @@ from flask import render_template, Blueprint, request, jsonify
 from app.models.models_roles import Recolector, Proveedor
 from app.models.models_registros import Solicitud, Visita, Certificado
 from app.models.models_barrios import Barrio
+from app.models.usuarios import Usuario
 from flask_login import login_required, current_user
 from datetime import datetime
 from app.models import db
+from app.utils.enviar_correo import enviar_correo
 from app import roles_required
 
 recolector = Blueprint('recolector', __name__)
@@ -37,21 +39,74 @@ def recolector_home():
     
     return render_template("recolector.html",solicitudes=solicitudes)
 
-# @recolector.route('/recolector/solicitudes')
-# @login_required
-# @roles_required('RECOLECTOR')
-# def cargar_solicitudes():
-#     informacion = db.session.query(Solicitud, Proveedor).join(Proveedor, Solicitud.id_proveedor == Proveedor.id_proveedor).all()
-#     solicitudes_na = Solicitud.query.filter_by(estado='pendiente')
-#     solicitudes_asignadas = Solicitud.query.filter_by(estado=str(current_user.id))
-#     solicitudes_cerradas = Solicitud.query.filter_by(estado='cerrada')
+@recolector.route('/recolector/historial')
+def cargar_historial():
+    id = current_user.id
 
-#     return render_template(
-#                     'solicitudes-rec.html',
-#                     solicitudes_na=solicitudes_na,
-#                     solicitudes_asignadas=solicitudes_asignadas,
-#                     solicitudes_cerradas=solicitudes_cerradas
-#                 )
+    consulta = db.session.query(Visita, Proveedor).join(Proveedor, Visita.id_proveedor==Proveedor.id_proveedor).filter(Visita.id_recolector==id)
+
+    visitas = []
+
+    for visita, proveedor in consulta:
+        dict = {
+            'id': visita.id_visita,
+            'proveedor': proveedor.nombre,
+            'fecha': visita.fecha_recoleccion,
+            'cantidad': visita.cant_recolectada,
+            'valor': visita.costo
+        }
+
+        visitas.append(dict)
+
+    return render_template('historial.html',visitas=visitas)
+
+
+@recolector.route('/recolector/actualizar_datos', methods=['PUT'])
+@login_required
+@roles_required(['RECOLECTOR','ADMINISTRADOR'])
+def actualizar_datos():
+    datos = request.get_json()
+
+    id = datos.get('cedula')
+
+    nuevos_datos = {
+        'nombre': datos.get('nombre').upper(),
+        'direccion': datos.get('direccion').upper(),
+        'comuna': datos.get('comuna'),
+        'barrio': datos.get('barrio'),
+        'correo': datos.get('correo').upper(),
+        'celular': datos.get('celular')
+    }
+
+    recolector = Recolector.query.get(id)
+    if recolector:
+       usuario = Usuario.query.get(id)
+       try:
+           usuario.actualizar_usuario(nombre=nuevos_datos.get('nombre'), correo=nuevos_datos.get('correo'))
+           recolector.actualizar_datos(nuevos_datos)
+           mensaje_actualización_datos = '''
+Hola,
+
+Queremos informarte que se han realizado actualizaciones en tus datos de usuario. Si realizaste estos cambios, ignora este mensaje. En caso contrario, por favor, contáctanos lo antes posible para investigar cualquier actividad sospechosa.
+
+¡Gracias por ser parte de nuestra comunidad!
+
+Saludos cordiales,
+El equipo de Ecofriendly
+'''
+           enviar_correo(datos.get('correo'),mensaje_actualización_datos,asunto='Actualizaste tus datos')
+           db.session.commit()
+
+           return jsonify({'mensaje':'Datos actualizados correctamente','icono':'success'})
+       
+       except Exception as e:
+           db.session.rollback()
+           print(e)
+           return jsonify({'mensaje':'Error al actualizar los datos','icono':'error'})
+       finally:
+           db.session.close()
+    
+    return jsonify({'mensaje':f'No se encontró recolector con el ID {id}','icono':'error'})
 
 @recolector.route('/recolector/solicitudes/confirmar', methods=['POST'])
 @login_required
@@ -142,4 +197,3 @@ def aceptar_solicitud():
         return jsonify({'error': 'Error al aceptar la solicitud'}), e
     finally:
         db.session.close()
-    

@@ -8,12 +8,28 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <title>Inicio - Ecofriendly S.A.S</title>
+    <style>
+        /* Agrega estas líneas de CSS */
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background-color: #fff; /* Cambia el color de fondo según sea necesario */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Opcional: añade una sombra */
+        }
+
+        header {
+            margin-top: 5%;
+        }
+
+    </style>
 </head>
 <body>
     <header>
         <div class="cont-header">
-            <button id="login-movil"><a href="{{ url_for('auth.pagina_login') }}" style="color:#fff; text-decoration: none;">INGRESAR</a></button>
-            <div class="cont-logo">
+            <a href="{{ url_for('auth.pagina_login') }}" style="color:#fff; text-decoration: none;"><button id="login-movil">INGRESAR</button></a>
+                <div class="cont-logo">
                 <a href="{{ url_for('main.index') }}"><img src="{{ url_for('static', filename='imagenes/logo.png') }}" alt="este es el logo" class="logo"></a>
             </div>
             <div class="cont-redes">

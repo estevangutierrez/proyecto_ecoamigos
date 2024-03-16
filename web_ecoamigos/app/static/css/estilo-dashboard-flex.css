@@ -98,11 +98,10 @@ button {
     background-color: #127848;
     border-radius: 6px;
     color: #eee;
+    font-size: 15px;
     border : none;
     transition: all 0.3s;
-    float: right;
     margin-top: 5%;
-    margin: 1em;
 }
 
 button:hover {

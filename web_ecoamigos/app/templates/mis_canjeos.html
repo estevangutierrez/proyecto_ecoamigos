@@ -10,8 +10,8 @@
 {% extends "administrador.html" %}
 {% block contenido_admin %}
 <body>
-    <div style="display: flex;" id="misCanjeos">
-        <div class="canjeo-p recoleccionpendiente" style=" width: 30%;" id="canjeo-p">
+    <div id="misCanjeos">
+        <div class="canjeo-p recoleccionpendiente" id="canjeo-p">
             {% for canjeo in canjeos %}
                 {% if canjeo.estado == 'pendiente' %}
                 <div>
@@ -26,7 +26,10 @@
                 {% endif %}
             {% endfor %}
         </div>
-        <div class="cont-tabla" style="width: 60%;" id="h-canjeos">
+        <div id="loadingOverlay">
+            <div class="spinner"></div>
+        </div>
+        <div class="cont-tabla" id="h-canjeos">
             <h4>HISTORIAL DE CANJEOS</h4>
             <table class="mostrar-publicaciones">
                 <thead>

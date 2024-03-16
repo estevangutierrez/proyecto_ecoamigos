@@ -14,8 +14,8 @@ from app.models import db
 admin = Blueprint('admin', __name__)
 
 
-def crear_usuario(id, nombre, rol, contrasena):
-    nuevo_usuario = Usuario(id=id,nombre=nombre,rol=rol)
+def crear_usuario(id, nombre, correo, rol, contrasena):
+    nuevo_usuario = Usuario(id=id,nombre=nombre,correo=correo,rol=rol)
     nuevo_usuario.ingresar_contrasena(contrasena)
 
     return nuevo_usuario
@@ -33,6 +33,52 @@ def publicaciones():
 def admin_home():
     return render_template('administrador.html')
 
+@admin.route('/administrador/actualizar_datos', methods=['PUT'])
+@login_required
+@roles_required('ADMINISTRADOR')
+def actualizar_datos():
+    datos = request.get_json()
+
+    id = datos.get('cedula')
+
+    nuevos_datos = {
+        'nombre': datos.get('nombre').upper(),
+        'correo': datos.get('correo').upper(),
+        'celular': datos.get('celular')
+    }
+
+    print(nuevos_datos)
+
+    administrador = Administrador.query.get(id)
+    if administrador:
+       usuario = Usuario.query.get(id)
+       try:
+           usuario.actualizar_usuario(nombre=datos.get('nombre'), correo=datos.get('correo'))
+           administrador.actualizar_datos(nuevos_datos)
+           db.session.commit()
+           mensaje_actualización_datos = '''
+Hola,
+
+Queremos informarte que se han realizado actualizaciones en tus datos de usuario. Si realizaste estos cambios, ignora este mensaje. En caso contrario, por favor, contáctanos lo antes posible para investigar cualquier actividad sospechosa.
+
+¡Gracias por ser parte de nuestra comunidad!
+
+Saludos cordiales,
+El equipo de Ecofriendly
+'''
+           enviar_correo(datos.get('correo'),mensaje_actualización_datos,asunto='Actualizaste tus datos')
+
+           return jsonify({'mensaje':'Datos actualizados correctamente','icono':'success'})
+       
+       except Exception as e:
+           print(e)
+           db.session.rollback()
+           return jsonify({'mensaje':'Error al actualizar los datos','icono':'error'})
+       finally:
+           db.session.close()
+    
+    return jsonify({'mensaje':f'No se encontró administrador con el ID {id}','icono':'error'})
+
 @admin.route('/administrador/solicitudes')
 @login_required
 @roles_required('ADMINISTRADOR')
@@ -42,7 +88,7 @@ def solicitudes():
         .join(Proveedor, Solicitud.id_proveedor == Proveedor.id_proveedor)
         )
     
-    proveedores = Proveedor.query.filter_by(estado=True).all()
+    proveedores = Proveedor.query.all()
     
     solicitudes_asignadas = (
         db.session.query(Solicitud, Recolector)
@@ -58,7 +104,7 @@ def solicitudes():
         .all()
         )
     
-    recolectores_data = Recolector.query.filter_by(estado=True)
+    recolectores_data = Recolector.query.all()
 
     solicitudes = []
     recolectores = []
@@ -172,7 +218,21 @@ def confirmar_canjeo():
         canjeo.id_administrador = administrador
         canjeo.estado = 'canjeado'
 
-        enviar_correo(correo,'Hemos realizado tu canjeo, revisa tu cuenta',asunto='HEMOS REALIZADO TU CANJEO')
+        mensaje_confirmacion = f'''
+¡Hola!
+
+Queremos informarte que ya realizamos el pago de tu canjeo por un valor de ${canjeo.valor}. Por favor, revisa tu cuenta para confirmar los detalles del canjeo realizado.
+
+Recuerda que cada vez que reciclas aceite de cocina usado, estás ayudando a cuidar nuestro planeta y ganando puntos para ti.
+
+Gracias por ser parte de nuestro movimiento hacia un mundo más limpio y sostenible.
+
+¡Sigue acumulando puntos y haciendo la diferencia!
+
+Atentamente,
+El equipo de Ecofriendly
+'''
+        enviar_correo(correo,mensaje_confirmacion,asunto='Hemos realizado tu canjeo')
 
 
         db.session.commit()
@@ -183,13 +243,6 @@ def confirmar_canjeo():
         return jsonify({'mensaje':'Hubo un error al realizar el canjeo','icono':'error'})
     finally:
         db.session.close()
-        
-
-
-    
-
-
-
 
 #LEER
 @admin.route('/administradores')
@@ -225,7 +278,7 @@ def nuevo_administrador():
     nombre = data.get('nombre')
     correo = data.get('correo')
     telefono = data.get('telefono')
-    contrasena = generar_contrasena(id)
+    contrasena = generar_contrasena()
     rol = 'ADMINISTRADOR'
 
     user = Usuario.query.filter_by(id=id).first()
@@ -233,7 +286,7 @@ def nuevo_administrador():
     if user:
         return jsonify({'success': False})
 
-    nuevo_usuario = crear_usuario(id,nombre,rol,contrasena)
+    nuevo_usuario = crear_usuario(id,nombre,correo,rol,contrasena)
     nuevo_admin = Administrador(id_admin=int(id),nombre=nombre,correo=correo,celular=telefono)
 
 
@@ -242,17 +295,27 @@ def nuevo_administrador():
     db.session.commit()
     db.session.close()
 
-    cuerpo_correo = f'''
-        Hola {nombre}, bienvenido a la familia Ecofriendly. 
-        Aquí están tus credenciales de acceso en el rol de {rol}
+    mensaje_bienvenida = f'''
+Hola { nombre.split()[0].capitalize() },
 
-        Usuario: {id}
-        Contraseña: {contrasena}
-        
-        Recuerda cambiar tu contraseña luego de inciar sesión por primera vez. =D
-        '''
+¡Te damos una calurosa bienvenida a la familia Ecofriendly!
 
-    enviar_correo(correo,cuerpo_correo)
+Estamos emocionados de tenerte con nosotros. A continuación, encontrarás tus credenciales de acceso en tu rol de { rol.lower() } para comenzar tu experiencia:
+
+Usuario: {id}
+Contraseña: {contrasena}
+
+Por favor, inicia sesión con estos datos y recuerda cambiar tu contraseña después del primer inicio de sesión.
+
+¡Esperamos que disfrutes de tu tiempo con nosotros y contribuyas a hacer del mundo un lugar más sostenible!
+
+¡Bienvenido/a de nuevo!
+
+Con cariño,
+El equipo de Ecofriendly
+'''
+
+    enviar_correo(correo,mensaje_bienvenida)
 
     return jsonify({'success': True})
 
@@ -302,7 +365,7 @@ def nuevo_recolector():
     direccion = data.get('direccion')
     comuna = data.get('comuna')
     barrio = data.get('barrio')
-    contrasena = generar_contrasena(id)
+    contrasena = generar_contrasena()
     rol = 'RECOLECTOR'
 
     user = Usuario.query.filter_by(id=id).first()
@@ -310,23 +373,34 @@ def nuevo_recolector():
     if user:
         return jsonify({'success': False})
 
-    nuevo_usuario = crear_usuario(id,nombre,rol,contrasena)
-    nuevo_recolector = Recolector(id_recolector=int(id),nombre=nombre,direccion=direccion,comuna=comuna,barrio=barrio,correo=correo,celular=telefono)
+    nuevo_usuario = crear_usuario(id,nombre,correo,rol,contrasena)
+    nuevo_recolector = Recolector(id_recolector=int(id),nombre=nombre,direccion=direccion,id_comuna=comuna,id_barrio=barrio,correo=correo,celular=telefono)
 
     db.session.add(nuevo_usuario)
     db.session.add(nuevo_recolector)
 
     try:
-        cuerpo_correo = f'''
-        Hola {nombre}, bienvenido a la familia Ecofriendly. 
-        Aquí están tus credenciales de acceso en el rol de {rol}
+        mensaje_bienvenida = f'''
+Hola { nombre.split()[0].capitalize() },
 
-        Usuario: {id}
-        Contraseña: {contrasena}
-        
-        Recuerda cambiar tu contraseña luego de inciar sesión por primera vez. =D
-        '''
-        enviar_correo(correo,cuerpo_correo)
+¡Te damos una calurosa bienvenida a la familia Ecofriendly!
+
+Estamos emocionados de tenerte con nosotros. A continuación, encontrarás tus credenciales de acceso en tu rol de { rol.lower() } para comenzar tu experiencia:
+
+Usuario: {id}
+Contraseña: {contrasena}
+
+Por favor, inicia sesión con estos datos y recuerda cambiar tu contraseña después del primer inicio de sesión.
+
+¡Esperamos que disfrutes de tu tiempo con nosotros y contribuyas a hacer del mundo un lugar más sostenible!
+
+¡Bienvenido/a de nuevo!
+
+Con cariño,
+El equipo de Ecofriendly
+'''
+
+        enviar_correo(correo,mensaje_bienvenida)
         db.session.commit()
         return jsonify({'success': True})
     except Exception as e:
@@ -380,7 +454,7 @@ def nuevo_proveedor():
     direccion = data.get('direccion')
     comuna = data.get('comuna')
     barrio = data.get('barrio')
-    contrasena = generar_contrasena(id)
+    contrasena = generar_contrasena()
     puntos = 0
     rol = 'PROVEEDOR'
 
@@ -389,24 +463,34 @@ def nuevo_proveedor():
     if user:
         return jsonify({'success': False})
 
-    nuevo_usuario = crear_usuario(id,nombre,rol,contrasena)
+    nuevo_usuario = crear_usuario(id,nombre,correo,rol,contrasena)
     nuevo_proveedor = Proveedor(id_proveedor=int(id),tipo_prov=int(tipo),nombre=nombre,direccion=direccion,id_comuna=comuna,id_barrio=barrio,correo=correo,celular=telefono,puntos=puntos)
 
     db.session.add(nuevo_usuario)
     db.session.add(nuevo_proveedor)
 
     try:
-        cuerpo_correo = f'''
-        Hola {nombre}, bienvenido a la familia Ecofriendly. 
-        Aquí están tus credenciales de acceso en el rol de {rol}\n
+        mensaje_bienvenida = f'''
+Hola { nombre.split()[0].capitalize() },
 
-        Usuario: {id}\n
-        Contraseña: {contrasena}\n
-        
-        Recuerda cambiar tu contraseña luego de inciar sesión por primera vez. =D
-        '''
-        enviar_correo(correo,cuerpo_correo)
+¡Te damos una calurosa bienvenida a la familia Ecofriendly!
+
+Estamos emocionados de tenerte con nosotros. A continuación, encontrarás tus credenciales de acceso en tu rol de { rol.lower() } para comenzar tu experiencia:
+
+Usuario: {id}
+Contraseña: {contrasena}
+
+Por favor, inicia sesión con estos datos y recuerda cambiar tu contraseña después del primer inicio de sesión.
+
+¡Esperamos que disfrutes de tu tiempo con nosotros y contribuyas a hacer del mundo un lugar más sostenible!
+
+¡Bienvenido/a de nuevo!
+
+Con cariño,
+El equipo de Ecofriendly
+'''
         db.session.commit()
+        enviar_correo(correo,mensaje_bienvenida)
         return jsonify({'success': True})
     except Exception as e:
         db.session.rollback()

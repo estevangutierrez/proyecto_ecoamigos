@@ -91,12 +91,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     solicitarCanjeo.addEventListener('click',() => {
-        diasValidos = [1,2,3,5]
+        diasValidos = [1,2,3,4]
         if(!diasValidos.includes(diaSemana)){
             Swal.fire('Dia incorrecto','solo puedes canjear de lunes a miercoles','warning');
+            Toast.fire({
+                'icon':'info',
+                'title':'Dia incorrecto. Solo puedes canjear de lunes a miercoles'
+            })
             return;
         } else if(puntosActuales < 200){
-            Swal.fire('Pocos puntos','','error');
+            Toast.fire({
+                'icon':'info',
+                'title':'Pocos puntos. Debes tener al menos 200 para canjear'
+            })
             return;
         }
 

@@ -1,0 +1,45 @@
+  .perfil {
+    max-width: 600px;
+    margin: 3% auto;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+  }
+  
+  .avatar {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .avatar img {
+    width: 100%;
+    border-radius: 50%;
+  }
+  
+  .info {
+    flex: 2;
+    padding-left: 20px;
+  }
+  
+  .info h1 {
+    font-size: 24px;
+    color: #333;
+    margin-top: 0;
+  }
+  
+  .datos p {
+    margin: 5px 0;
+  }
+  
+  .datos strong {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+  
+  @media only screen and (max-width: 767px) {
+    .avatar {
+      display: none;
+    }
+  }

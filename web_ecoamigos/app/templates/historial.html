@@ -4,35 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css') }}">
-    <title>Recolecciones</title>
+    <title>Historial</title>
 </head>
 {% extends "administrador.html" %}
 {% block contenido_admin %}
 <body>
     <div class="cont-tabla">
-        <h3>Historial de recolecciones</h3>
-        <table class="mostrar-publicaciones h-recolecciones" >
-            <thead>
+        <h2>Historial</h2>
+        <table class="mostrar-publicaciones" style="overflow-y: scroll;">
+            <thead style="position: sticky;">
                 <tr>
                     <th scoope="col">ID</th>
+                    <th scoope="col">Proveedor</th>
                     <th scoope="col">Fecha</th>
-                    <th scoope="col">CA</th>
-                    <th scoope="col">CR</th>
-                    <th scoope="col">Puntos</th>
+                    <th scoope="col">Cantidad</th>
                     <th scoope="col">Valor</th>
-                    <th scoope="col"></th>
                 </tr>
             </thead>
-            <tbody class="table-group-divider tabla-mostrar">
-                {% for recoleccion in recolecciones %}
+            <tbody class="table-group-divider tabla-mostrar" id="recolector-tabla">
+                {% for visita in visitas %}
                 <tr>
-                    <td>{{ recoleccion.id }}</td>
-                    <td>{{ recoleccion.fecha }}</td>
-                    <td>{{ recoleccion.cantidad_s }}</td>
-                    <td>{{ recoleccion.cantidad_r }}</td>
-                    <td>{{ recoleccion.puntos }}</td>
-                    <td>${{ recoleccion.valor }}</td>
-                    <td><button class="ed-del eliminar" style="color:  #FF0000" title="Generar certificado"><i class="bi bi-file-earmark-pdf-fill"><a href="/generar_pdf/{{ recoleccion.id }}" target="_blank" style="color: transparent">..</a></i></button></td>
+                    <td>{{ visita.id }}</td>
+                    <td>{{ visita.proveedor }}</td>
+                    <td>{{ visita.fecha.strftime('%d/%m/%Y %I:%M %p') }}</td>
+                    <td>{{ visita.cantidad }}</td>
+                    <td>{{ visita.valor }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

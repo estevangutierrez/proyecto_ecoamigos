@@ -1,9 +1,21 @@
 document.addEventListener('DOMContentLoaded', ()=> {
 
+    const loadingOverlay = document.getElementById('loadingOverlay');
+
+    function showLoadingOverlay() {
+        loadingOverlay.style.display = 'block';
+    }
+
+    function hideLoadingOverlay() {
+        loadingOverlay.style.display = 'none';
+    }
+
     function verComprobante(id){
+        showLoadingOverlay()
         fetch(`/proveedor/mis_canjeos/soporte/${id}`)
         .then(response => response.json())
         .then(data => {
+            hideLoadingOverlay()
             Swal.fire({
                 title: "Este es el comprobante de pago de tu canjeo",
                 text: "*Si no ves reflejado este pago en tu cuenta, comunicate con nosotros.",

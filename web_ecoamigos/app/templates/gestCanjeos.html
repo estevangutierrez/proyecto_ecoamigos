@@ -11,7 +11,7 @@
             border: 1px solid #ddd;
             padding: 15px;
             border-radius: 10px;
-            width: 300px;
+            width: 250px;
             margin: 2% auto;
         }
     
@@ -46,7 +46,7 @@
 
         .tabla-canjeos {
             display: grid;
-            grid-template-columns: 2fr 2fr 2fr;
+            grid-template-columns: 2fr 2fr 2fr 2fr;
         }
 
         .doble-inp {
@@ -64,6 +64,12 @@
         <span>Canjeos pendientes</span>
         <span>Historial de canjeos</span>
     </div>
+    <!-- <div class="filtro">
+        <div class="input-filtro">
+            <input type="number" name="" id="">
+            <button id="btn-buscar-filtro"><i class="bi bi-search"></i></button>
+        </div>
+    </div>  -->
     <div class="cont-tabla">
         <div class="tabla-canjeos">
             {% for canjeo in canjeos %}

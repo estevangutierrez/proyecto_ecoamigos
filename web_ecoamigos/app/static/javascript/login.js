@@ -32,11 +32,11 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
-            hideLoadingOverlay();
-
             if(data.success){
                 window.location.href = data.redirect_url;
+                hideLoadingOverlay();
             } else {
+                hideLoadingOverlay();
                 Swal.fire("¡Ups!","Verifique que todos los datos sean correctos y los campos esten completos","error");
             }
         })
