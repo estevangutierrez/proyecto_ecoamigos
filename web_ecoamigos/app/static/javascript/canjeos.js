@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     solicitarCanjeo.addEventListener('click',() => {
-        diasValidos = [1,2,3,4]
+        diasValidos = [1,2,3]
         if(!diasValidos.includes(diaSemana)){
             Swal.fire('Dia incorrecto','solo puedes canjear de lunes a miercoles','warning');
             Toast.fire({

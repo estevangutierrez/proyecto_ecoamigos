@@ -187,6 +187,8 @@ def cargar_canjeos():
         }
         canjeos.append(canjeo_dict)
 
+    canjeos.reverse()
+
     return render_template('mis_canjeos.html',canjeos=canjeos)
 
 @proveedor.route('/proveedor/mis_canjeos/soporte/<int:id>', methods=['GET'])

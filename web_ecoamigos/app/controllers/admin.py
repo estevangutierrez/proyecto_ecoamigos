@@ -193,6 +193,8 @@ def cargar_canjeos():
         }
         canjeos.append(canjeo_dict)
 
+        canjeos.reverse()
+
     return render_template('gestCanjeos.html',canjeos=canjeos)
 
 @admin.route('/administrador/canjeos/confirmar_canjeo', methods=['PUT'])
