@@ -4,10 +4,9 @@ from app.models.models_registros import Solicitud, Visita, Certificado
 from app.models.models_barrios import Barrio
 from app.models.usuarios import Usuario
 from flask_login import login_required, current_user
-from datetime import datetime
 from app.models import db
 from app.utils.enviar_correo import enviar_correo
-from app import roles_required
+from app import roles_required, fecha_actual
 
 recolector = Blueprint('recolector', __name__)
 
@@ -122,7 +121,7 @@ def confirmar_solicitud():
 
     id_recolector=int(solicitud.estado),
     id_proveedor=int(solicitud.id_proveedor),
-    fecha_recoleccion=datetime.now(),
+    fecha_recoleccion=fecha_actual,
     costo=(int(cantidad_recolectada)*2500),
     puntos = (int(cantidad_recolectada)/2)
 

@@ -10,6 +10,8 @@ from flask import render_template
 from functools import wraps
 from flask import abort
 from flask_login import current_user
+from datetime import datetime
+import pytz
 
 def roles_required(roles):
     def decorator(func):
@@ -29,6 +31,8 @@ db.init_app(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'auth.login'
+timezone = pytz.timezone('America/Bogota')
+fecha_actual = datetime.now(timezone)
 
 # Configuración de APScheduler
 scheduler = APScheduler()

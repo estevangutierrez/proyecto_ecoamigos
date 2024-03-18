@@ -1,11 +1,10 @@
 from flask import Blueprint, request, jsonify
-from datetime import datetime
 import base64
 from app.models.models_publico import Noticia
 from flask_login import login_required, current_user
 from app.models import db
 from base64 import b64encode
-from app import roles_required
+from app import roles_required, fecha_actual
 
 
 publicaciones = Blueprint('publicaciones', __name__)
@@ -20,7 +19,7 @@ def crear_publicacion():
         id_admin = current_user.id
         titulo = datos.get('titulo')
         descripcion = datos.get('descripcion')
-        fecha = datetime.now()
+        fecha = fecha_actual
         imagen_base64 = datos.get('imagen_data').split(',')[1]
         imagen_binario = base64.b64decode(imagen_base64)
         nueva_publicacion = Noticia(id_admin=id_admin,titulo=titulo,descripcion=descripcion,fecha=fecha,recurso=imagen_binario)

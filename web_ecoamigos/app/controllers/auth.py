@@ -4,12 +4,10 @@ from app.models.usuarios import Usuario
 from app.models.models_roles import Proveedor, Administrador, Recolector
 from app.models.models_barrios import Comuna, Barrio
 from app.utils.enviar_correo import enviar_correo
-from datetime import datetime
+from app import fecha_actual
 from app.models import db
 
 auth = Blueprint('auth', __name__)
-
-fecha = datetime.now().strftime('%d/%m/%Y %I:%M %p')
 
 
 @auth.route('/pagina_login')
@@ -70,7 +68,7 @@ def cambiar_contrasena():
             mensaje_cambio_contrasena = f'''
 Estimado/a {usuario.nombre.split()[0].capitalize()},
 
-Te informamos que tu contraseña de Ecoamigos ha sido actualizada con éxito el {fecha}. Si no realizaste esta acción, te recomendamos que te pongas en contacto con nosotros de inmediato para investigar cualquier actividad no autorizada.
+Te informamos que tu contraseña de Ecoamigos ha sido actualizada con éxito el {fecha_actual.strftime('%d/%m/%Y %I:%M %p')}. Si no realizaste esta acción, te recomendamos que te pongas en contacto con nosotros de inmediato para investigar cualquier actividad no autorizada.
 
 ¡Gracias por confiar en nosotros!
 

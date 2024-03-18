@@ -5,8 +5,7 @@ from flask_login import login_required, current_user
 from app.models import db
 from app.models.usuarios import Usuario
 from app.utils.enviar_correo import enviar_correo
-from datetime import datetime
-from app import roles_required
+from app import roles_required, fecha_actual
 from app.utils.generar_token import generar_token
 import base64
 
@@ -144,7 +143,7 @@ def enviar_solicitud():
         return jsonify({'existe':'Solicitud existente'})
 
     id_proveedor = proveedor.id_proveedor
-    fecha_solicitud = datetime.now()
+    fecha_solicitud = fecha_actual
     cantidad_aprox = datos.get('cantidad')
     detalle = datos.get('detalle')
     token = nuevo_token
@@ -213,7 +212,7 @@ def canjear_puntos():
     cuenta = datos.get('cuenta')
     puntos = int(datos.get('puntos'))
     valor = puntos*200
-    fecha = datetime.now()
+    fecha = fecha_actual
 
     canjeo_activo = db.session.query(Canjeo).filter(Canjeo.id_proveedor==id_proveedor,Canjeo.estado=='pendiente').first()
 
