@@ -47,8 +47,6 @@ def actualizar_datos():
         'celular': datos.get('celular')
     }
 
-    print(nuevos_datos)
-
     administrador = Administrador.query.get(id)
     if administrador:
        usuario = Usuario.query.get(id)

@@ -27,6 +27,13 @@
         .bi-trash-fill {
             color: rgb(255, 53, 53);
         }
+        .nav-bar li a {
+    display: block; /* Hacer que los enlaces sean elementos de bloque */
+    width: 100%; /* Ocupar todo el ancho disponible */
+    text-decoration: none; /* Quitar subrayado predeterminado */
+    color: inherit; /* Heredar color de texto del elemento padre */
+    padding: 1%; /* Agregar relleno para mejorar la experiencia de clic */
+}
   </style>
 </head>
 <body id="admin-p">
@@ -78,19 +85,6 @@
       {% block contenido_admin %}{% endblock %}
     </div>
   </main>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Obtener elementos del DOM
-        var menuIcon = document.getElementById('menu-icon');
-        var navBar = document.getElementById('nav-bar');
-
-        // Agregar evento de clic al icono del menú
-        menuIcon.addEventListener('click', function () {
-            // Alternar la clase 'show' en la lista nav-bar al hacer clic
-            navBar.classList.toggle('active');
-        });
-    });
-</script>
   <script src="{{ url_for('static',filename='javascript/cerrarSesion.js') }}"></script>
 </body>
 </html>

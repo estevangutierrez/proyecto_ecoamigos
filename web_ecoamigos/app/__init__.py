@@ -25,7 +25,6 @@ def roles_required(roles):
 
 app = Flask(__name__)
 app.config.from_object(Config)
-app.config['SECRET_KEY'] = 'eaaaR/5mM222%#2298Tf'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 db.init_app(app)
 bcrypt = Bcrypt(app)
