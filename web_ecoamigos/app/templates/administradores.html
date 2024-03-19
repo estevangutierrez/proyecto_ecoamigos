@@ -9,6 +9,7 @@
 {% extends "administrador.html" %}
 {% block contenido_admin %}
 <body>
+    <input type="hidden" name="currentUser" id="currentUser" value="{{ current_user.id }}">
     <div class="filtro">
         <div class="input-filtro">
             <input type="number" name="" id="" placeholder="Buscar por cédula">
@@ -89,6 +90,7 @@
     <script src="{{ url_for('static', filename='javascript/scriptAdmin.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/paginacion.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/filtro.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/gestionUsuarios.js') }}"></script>
 </body>
 {% endblock %}
 </html>

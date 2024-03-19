@@ -36,10 +36,11 @@ class Usuario(db.Model, UserMixin):
         if correo:
             self.correo = correo
 
-
-    
     def desactivar_usuario(self):
         self.estado = False
+        
+    def reactivar_usuario(self):
+        self.estado = True
     
 
     

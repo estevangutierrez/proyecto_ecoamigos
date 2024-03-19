@@ -4,6 +4,7 @@ from app.models.usuarios import Usuario
 from app.models.models_roles import Proveedor, Administrador, Recolector
 from app.models.models_barrios import Comuna, Barrio
 from app.utils.enviar_correo import enviar_correo
+from app.utils.generar_contrasena import generar_contrasena
 from app import fecha_actual
 from app.models import db
 
@@ -45,6 +46,10 @@ def logout():
     logout_user()
     session.pop('user_id', None)
     return redirect(url_for('main.index'))
+
+@auth.route('/formulario_recuperar_contrasena')
+def cargar_form_recuperar_contrasena():
+    return render_template('recuperar-contrasena.html')
 
 @auth.route('/cambiar_contrasena', methods=['PUT'])
 @login_required
@@ -89,6 +94,53 @@ El equipo de Ecoamigos
 
     return jsonify({'mensaje':'Usuario no encontrado','icono':'error'})
 
+@auth.route('/recuperar_contrasena', methods=['PUT'])
+def recuperar_contrasena():
+    datos = request.get_json()
+
+    id = datos.get('id')
+    correo = datos.get('correo').upper()
+
+    try:
+        usuario = Usuario.query.get(id)
+        if not usuario:
+            return jsonify({'mensaje':'Usuario no encontrado','icono':'error'})
+        
+        if usuario.correo!=correo:
+            return jsonify({'mensaje':'El correo ingresado no es correcto','icono':'error'})
+        
+        contrasena_t = generar_contrasena()
+        usuario.ingresar_contrasena(contrasena_t)
+
+        enviar_correo(usuario.correo,f"Tu contraseña temporal es {contrasena_t} cámbiala luego de iniciar sesión","Recuperacion de contraseña")
+        db.session.commit()
+        return jsonify({'mensaje':f'Se ha enviado tu contraseña temporal a {usuario.correo}','icono':'success'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'mensaje':'Hubo un error al solicitar la contraseña temporal','icono':'error'})
+    finally:
+        db.session.close()
+
+@auth.route('/usuarios/desactivar', methods=['PUT'])
+@login_required
+def desactivar_usuario():
+    datos = request.get_json()
+    usuario = Usuario.query.get(datos.get('id'))
+
+    try:
+        if not usuario:
+            return jsonify({'mensaje':'Usuario no encontrado','icono':'error'})
+        
+        usuario.desactivar_usuario()
+        enviar_correo(usuario.correo, "Tu usuario ha sido desactivado por inactividad","Usuario desactivado")
+        db.session.commit()
+        return jsonify({'mensaje':'Usuario desactivado exitosamente','icono':'success'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'mensaje':'Error al desactivar el usuario','icono':'error'})
+    finally:
+        db.session.close()
+
 @auth.route('/mi_perfil', methods=['GET'])
 def cargar_perfil():
     id = current_user.id 
@@ -105,6 +157,8 @@ def cargar_perfil():
         usuario = Recolector.query.get(id)
 
     return render_template('perfil.html',usuario=usuario, comunas=comunas, barrios=barrios)
+
+
 
             
         

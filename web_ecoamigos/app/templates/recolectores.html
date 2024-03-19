@@ -43,7 +43,7 @@
                             ACTIVO
                         {% endif %}
                     </td>
-                    <td><button class="ed-del"><i class="bi bi-pencil-square"></i></button><button class="ed-del"><i class="bi bi-trash-fill"></i></button></td>
+                    <td><button class="ed-del"><i class="bi bi-trash-fill"></i></button></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -109,6 +109,7 @@
     <script src="{{ url_for('static', filename='javascript/ventanasEmergentes.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/filtro.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/paginacion.js') }}"></script>
+    <script src="{{ url_for('static', filename='gestionUsuarios.js') }}"></script>
 </body>
 {% endblock %}
 </html>

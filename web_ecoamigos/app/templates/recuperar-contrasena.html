@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-admin.css')}}">
     <title>Recuperar contraseña</title>
     <style>
 
@@ -70,14 +71,19 @@
     </style>
 </head>
 <body>
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
     <div id="cambiar-contrasena" class="modal">
         <h1>Recupera tu contraseña</h1>
         <label for="documento" class="label">Numero de documento</label>
         <input type="number" name="documento" id="documento" required class="input-required" autocomplete="off">
         <label for="correo" class="label">Correo electrónico</label>
         <input type="email" id="correo" name="correo" required class="input-required" autocomplete="off">
-        <button id="cancelar" class="cancelar-btn">Volver</button>
         <button id="enviar" class="guardar-cambios-btn">Enviar</button>
+        <a href="{{ url_for('auth.pagina_login') }}"><button id="cancelar" class="cancelar-btn">Volver</button></a>
       </div>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+      <script src="{{ url_for('static',filename='javascript/recuperarContrasena.js') }}"></script>
 </body>
 </html>
