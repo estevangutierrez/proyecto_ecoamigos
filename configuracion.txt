@@ -1,0 +1,15 @@
+1. Crear un archivo .env en la raiz del proyecto con la siguiente estructura:
+    DB_USER = 'usuario_de_la_base_de_datos'
+    DB_HOST = 'host_de_la_base_de_datos'
+    DB_NAME = 'nombre_de_la_base_de_datos'
+    SECRET_KEY = 'tu_clave_secreta'
+
+2. Crear un archivo config.py en la raiz del proyecto con la siguiente estructura:
+    import os
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    class Config:
+        SQLALCHEMY_DATABASE_URI = f"mysql://{os.environ['DB_USER']}@{os.environ['DB_HOST']}/{os.environ['DB_NAME']}"
+        SQLALCHEMY_TRACK_MODIFICATIONS = False
+        SECRET_KEY = os.environ['SECRET_KEY']

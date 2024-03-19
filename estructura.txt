@@ -1,0 +1,118 @@
+```
+ESQUEMA ESTRUCTURAL DE LA APLICACIÓN
+└── 📁web_ecoamigos
+    └── .env
+    └── .gitignore
+    └── 📁app
+        └── 📁controllers
+            └── admin.py
+            └── auth.py
+            └── barrios.py
+            └── certificados.py
+            └── main.py
+            └── proveedor.py
+            └── publicaciones.py
+            └── recolector.py
+            └── __init__.py
+        └── 📁models
+            └── models_barrios.py
+            └── models_publico.py
+            └── models_registros.py
+            └── models_roles.py
+            └── usuarios.py
+            └── __init__.py
+        └── routes.py
+        └── 📁static
+            └── 📁css
+                └── estilo-admin.css
+                └── estilo-dashboard-flex.css
+                └── estilo-index.css
+                └── estilo-perfil.css
+                └── estilo-registro-recolectores.css
+            └── 📁imagenes
+                └── aceite.png
+                └── background-video.mp4
+                └── barrel.png
+                └── caja.png
+                └── construccion.png
+                └── favicon.ico
+                └── fondo_portal.png
+                └── logo.png
+                └── minilogo.jpg
+                └── minilogo.png
+                └── personas.png
+                └── producto.jpg
+                └── usuario.png
+            └── 📁javascript
+                └── aceptarSolicitud.js
+                └── actualizarDatos.js
+                └── agregarProveedorAdm.js
+                └── cambiarContrasena.js
+                └── canjearADM.js
+                └── canjeos.js
+                └── cerrarSesion.js
+                └── contDinamico.js
+                └── crearSolicitud.js
+                └── crearSolicitudAdm.js
+                └── dashboard.js
+                └── filtro.js
+                └── filtroPublicaciones.js
+                └── gestionUsuarios.js
+                └── login.js
+                └── paginacion.js
+                └── paginacionBlog.js
+                └── recuperarContrasena.js
+                └── scriptAdmin.js
+                └── scriptAsignarRecolector.js
+                └── scriptBarrios.js
+                └── scriptProveedor.js
+                └── scriptPublicaciones.js
+                └── scriptRecolectores.js
+                └── soportes.js
+                └── tablasDinamicas.js
+                └── tokens.js
+                └── ventanasEmergentes.js
+        └── 📁templates
+            └── administrador.html
+            └── administradores.html
+            └── blog.html
+            └── dashboard_grid.html
+            └── error_acceso.html
+            └── gestCanjeos.html
+            └── historial.html
+            └── index.html
+            └── layout.html
+            └── login.html
+            └── mis_canjeos.html
+            └── perfil.html
+            └── plantilla_certificado.html
+            └── proveedores.html
+            └── publicaciones.html
+            └── recolecciones_prov.html
+            └── recolector.html
+            └── recolectores.html
+            └── recuperar-contrasena.html
+            └── solicitudes.html
+        └── 📁utils
+            └── client_secret_942503781738-bjc2ehu4amq499lq61c23d46jjqd8tsl.apps.googleusercontent.com.json
+            └── enviar_correo.py
+            └── generar_contrasena.py
+            └── generar_token.py
+            └── scheduler.py
+            └── tokens.json
+        └── __init__.py
+    └── config.py
+    └── run.py
+```
+
+app/: Contiene la lógica de la aplicación.
+
+models/: Define los modelos de datos para la base de datos.
+utils/: Contiene utilidades y funciones auxiliares.
+templates/: Almacena las plantillas HTML utilizadas por Flask.
+static/: Contiene archivos estáticos como CSS, JavaScript e imágenes.
+routes.py: Define las rutas y las funciones de las vistas.
+init.py: Inicializa la aplicación Flask.
+config.py: Archivo de configuración de la aplicación.
+
+run.py: Archivo para ejecutar la aplicación.
