@@ -21,6 +21,7 @@ fetch('/blog/publicaciones')
             // Asignar datos de la noticia a los elementos
             tituloElement.innerText = noticia.titulo;
             descripcionElement.innerText = noticia.descripcion;
+            descripcionElement.style.display = 'none'
             fechaElement.innerText = formatearFecha(noticia.fecha)
 
             imagenElement.src = `data:image/*;base64,${noticia.imagen}`
@@ -35,6 +36,10 @@ fetch('/blog/publicaciones')
             noticiaItem.appendChild(noticiaCont);
 
             document.getElementById('noticias-container').appendChild(noticiaItem);
+
+            noticiaItem.addEventListener('click', () => {
+                mostrarPublicacionAmpliada(noticia);
+            });
         });
     })
     .catch(error => console.error('Error:', error));
@@ -53,7 +58,20 @@ function formatearFecha(fechaString) {
     };
 
     const fechaFormateada = fecha.toLocaleString('es-CO', options);
-    console.log(fechaFormateada)
-
     return fechaFormateada;
 }
+
+function mostrarPublicacionAmpliada(noticia) {
+    document.getElementById('titulo-publicacion').innerText = noticia.titulo;
+    document.getElementById('descripcion-publicacion').innerText = noticia.descripcion;
+    document.getElementById('imagen-publicacion').src = `data:image/*;base64,${noticia.imagen}`;
+    document.getElementById('fecha-publicacion').innerText = formatearFecha(noticia.fecha);
+
+    // Mostrar el diálogo
+    document.getElementById('dialogo').style.display = 'block';
+}
+
+// Función para cerrar el diálogo
+document.getElementById('cerrar-dialogo').addEventListener('click', () => {
+    document.getElementById('dialogo').style.display = 'none';
+});

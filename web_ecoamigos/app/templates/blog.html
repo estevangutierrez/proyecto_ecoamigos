@@ -24,20 +24,17 @@
                     <!-- <button id="nextPage">Siguiente</button> -->
                 </div>
             </section>
-            <aside class="miniaturas">
-                <h3>Artículos destacados</h3>
-                <div class="miniatura-item">
-                    <img src="{{ url_for('static', filename='imagenes/construccion.png') }}" alt="Imagen del artículo">
-                    <div class="miniatura-cont">
-                        <h2>Título del Artículo</h2>
-                        <div class="info">
-                            <span class="fecha">Fecha: 7 de Agosto, 2023</span>
-                            <span class="autor">Por: Autor del Artículo</span>
-                        </div>
-                    </div>
-                </div>
-            </aside>
         </div>
+    <!-- Agregar este código al final del bloque <body> -->
+    <div id="dialogo" class="dialogo">
+        <div class="contenido-dialogo">
+            <span id="cerrar-dialogo" class="cerrar-dialogo">&times;</span>
+            <h2 id="titulo-publicacion"></h2>
+            <img id="imagen-publicacion" src="" alt="Imagen de la publicación">
+            <p id="descripcion-publicacion"></p>
+            <h6 id="fecha-publicacion"></h6>
+        </div>
+    </div>
     </main>
     <script src="{{ url_for('static',filename='javascript/contDinamico.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/paginacionBlog.js') }}"></script>
